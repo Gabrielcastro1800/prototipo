@@ -17,7 +17,7 @@ const animal = {
 };
 let grupo = []
 
-for(c2=0;c2 < 8 ;c2++){
+for(c2=0;c2 < 15 ;c2++){
     grupo[c2] = Object.create(animal)
 }
 let ids = 0
@@ -42,7 +42,10 @@ function main(){
     c.fillStyle = "red"
     c.fillRect(10,10,70,40)
     c.fillStyle = "Black"
+    
+    c.font = "10px Arial"
     c.fillText("adicionar teste",10,35)
+    c.font = "20px Arial"
     c.fillText("População teste x"+(grupo.length),90,35)
    
 }
