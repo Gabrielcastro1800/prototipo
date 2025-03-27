@@ -1,5 +1,6 @@
 const canvas = document.getElementById("canvas");
 let c = canvas.getContext("2d");
+c.imageSmoothingEnabled =false
 
 const animal = {
     x:300,
@@ -11,33 +12,43 @@ const animal = {
     wandering:0,
     wanderingcool:0,
     energia:1000,
-    maxenergia:1000
+    maxenergia:1000,
+    visao:100
 };
 let grupo = []
-grupo[0] = Object.create(animal)
-grupo[1] = Object.create(animal)
-grupo[2] = Object.create(animal)
-grupo[3] = Object.create(animal)
-grupo[4] = Object.create(animal)
-grupo[5] = Object.create(animal)
-setInterval(main,50)
 
+for(c2=0;c2 < 8 ;c2++){
+    grupo[c2] = Object.create(animal)
+}
+let ids = 0
+
+
+setInterval(main,50)
+let testsprite = new Image
+testsprite.src = "1.png"
 
 
 
 function main(){
+    ids = grupo.length
     c.clearRect(0,0,1200,1200)
-    for(c1=0;c1 < grupo.length;c1++){
+    for(c1=0;c1 < grupo.length ;c1++){
         coli(c1)
         wander(c1)
         wandering(c1)
         direc(c1)
-        c.fillRect(grupo[c1].x,grupo[c1].y,20,20)
+        c.drawImage(testsprite,grupo[c1].x,grupo[c1].y,32,32)
     }
+    c.fillStyle = "red"
+    c.fillRect(10,10,70,40)
+    c.fillStyle = "Black"
+    c.fillText("adicionar teste",10,35)
+    c.fillText("População teste x"+(grupo.length),90,35)
    
 }
 function wander(id){
-    if(grupo[id].wandering == 1){
+    if(grupo[id].wandering == 1)
+    {
         if (grupo[id].direc == 1){
             grupo[id].vx += 0.1
         }
@@ -109,6 +120,7 @@ function wandering(id){
     }
 }
 function coli(id){
+    
     if( grupo[id].x > 1200){
         grupo[id].x = 1200
     }
@@ -122,3 +134,10 @@ function coli(id){
         grupo[id].y = 0
     }
 }
+
+
+canvas.addEventListener("click",function(){
+    if( event.offsetX > 10 && event.offsetX < 10+70 && event.offsetY > 10 && event.offsetY < 10+40 ){
+        grupo[grupo.length] = Object.create(animal)
+    }
+})
