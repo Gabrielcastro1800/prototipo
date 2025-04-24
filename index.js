@@ -23,6 +23,7 @@ const animal = { // objeto do animal base
     //probriendades marcadas com *** são genes ou status que provavelmente serão auterados
     // de pai pra filhos
 let grupo = []
+let zoom = 1
 
 for(c2=0;c2 < 15 ;c2++){ // temporario! enche um vetor com copias do obj animal 
     grupo[c2] = Object.create(animal)
@@ -48,7 +49,7 @@ function main(){ // funcao principal do jogo
         wandering(c1)
         direc(c1)
         direcao(c1)
-        c.drawImage(testsprite,grupo[c1].x,grupo[c1].y,32,32)
+        c.drawImage(testsprite,grupo[c1].x,grupo[c1].y,32*zoom,32*zoom)
         
     }
     c.fillStyle = "red"
@@ -63,7 +64,7 @@ function main(){ // funcao principal do jogo
     c.fillText("velocidade",10,80)
     c.fillText(velocidadeswitch+"x",120,80)
 
-    c.drawImage(testtree,water[0],water[1],water[2],water[3])
+    c.drawImage(testtree,water[0],water[1],water[2]*zoom,water[3]*zoom)
     setTimeout(main,velocidade)// chama e repete a função do main() "principal" basicamente o fps do jogo/simulação
 
 }
@@ -98,5 +99,19 @@ canvas.addEventListener("click",function(){
                 break;
         }
     }
+
 })
+document.addEventListener("keyup", function(){
+if(event.keyCode === 187){
+    zoom+=5
+}
+if(event.keyCode === 189){
+    zoom-=5
+}
+if(zoom < 0)
+{
+    zoom = 1
+}
+}
+);
 main()
