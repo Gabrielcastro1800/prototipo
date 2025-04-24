@@ -32,17 +32,17 @@ let water = [400,300,50,50] // temporario relacionado a localização da comida 
 let velocidade = 30 // quantidade de milesegundos do fps não funciona por enquanto 
 let velocidadeswitch = 1 // relacionado ao botão de troca de velecidade não funciona por enquanto 
 setInterval(main,velocidade)// chama e repete a função do main() "principal" basicamente o fps do jogo/simulação
-let testsprite = new Image
+let testsprite = new Image // carregando a imagem do animal
 testsprite.src = "1.png"
 let testtree = new Image
 testtree.src = "treetemp.png"
 
 
 
-function main(){
+function main(){ // funcao principal do jogo
     ids = grupo.length
-    c.clearRect(0,0,1200,1200)
-    for(c1=0;c1 < grupo.length ;c1++){
+    c.clearRect(0,0,1200,1200) // limpa a tela do jogo a cada frame
+    for(c1=0;c1 < grupo.length ;c1++){ // chama as funcoes para cada animal
         visao(c1)
         coli(c1)
         wander(c1)
@@ -67,125 +67,7 @@ function main(){
     c.drawImage(testtree,water[0],water[1],water[2],water[3])
    
 }
-function wander(id){
-    if(grupo[id].wandering == 1)
-    {
-        if (grupo[id].direc == 1){
-            grupo[id].vx += 0.1
-        }
-        if (grupo[id].direc == 2){
-            grupo[id].vx -= 0.1
-        }
-        if (grupo[id].direc == 3){
-            grupo[id].vy += 0.1
-        }    
-        if (grupo[id].direc == 4){
-            grupo[id].vy -= 0.1
-        }
 
-    
-       
-        
-    }
-    if(grupo[id].vx > 1){
-        grupo[id].vx = 1
-    }
-    if(grupo[id].vy > 1){
-        grupo[id].vy = 1
-    }
-    if(grupo[id].vx < -1){
-        grupo[id].vx = -1
-    }
-    if(grupo[id].vy < -1){
-        grupo[id].vy = -1
-    }
-    if(grupo[id].vx > 0){
-        grupo[id].vx -= 0.05
-    }
-    if(grupo[id].vx < 0){
-        grupo[id].vx += 0.05
-    }
-    if(grupo[id].vy > 0){
-        grupo[id].vy -= 0.05
-    }
-    if(grupo[id].vy < 0){
-        grupo[id].vy += 0.05 
-    }
-    grupo[id].energia--
-    grupo[id].x += grupo[id].vx
-        grupo[id].y += grupo[id].vy
-    
-    
-}
-function direc(id){
-    grupo[id].direccool +=1
-    if(grupo[id].direccool > 50){
-        grupo[id].direc = Math.ceil(Math.random()*4)
-        grupo[id].direccool = 0
-    }
-    
-}
-function wandering(id){
-    grupo[id].wanderingcool += 1
-    if(grupo[id].wanderingcool > 60){
-
-    au = Math.ceil(Math.random()*2)
-    if(au == 1){
-        if(grupo[id].wandering == 0 && grupo[id].direcao == 0){
-            grupo[id].wandering = 1
-        }
-        else{
-            grupo[id].wandering = 0
-        }
-        
-    }
-   
-    grupo[id].wanderingcool = 0
-    }
-}
-function coli(id){
-    
-    if( grupo[id].x > 1200){
-        grupo[id].x = 1200
-    }
-    if( grupo[id].x < 0){
-        grupo[id].x = 0
-    }
-    if( grupo[id].y > 780){
-        grupo[id].y = 780
-    }
-    if( grupo[id].y < 0){
-        grupo[id].y = 0
-    }
-}
-function direcao(id){
-    if(grupo[id].direcao == 1){
-        if(!(grupo[id].x > water[0] && grupo[id].x < water[2] && grupo[id].y > water[1] && grupo[id].x < water[4])){
-            if(grupo[id].x > water[0] ){
-                grupo[id].vx += 0.1
-            }
-            if(grupo[id].y > water[1] ){
-                grupo[id].vy += 0.1
-            }
-            if(grupo[id].x < water[0] ){
-                grupo[id].vx -= 0.1
-            }
-            if(grupo[id].y < water[1] ){
-                grupo[id].vy -= 0.1
-            }
-        }
-        
-    }
-}
-function visao(id){
-    if(water[0] > grupo[id].x && water[0] < grupo[id].x+grupo[id].visao && water[1] > grupo[id].y && water[1] > grupo[id].y+grupo[id].visao){
-        console.log("aqui")
-        if(grupo[id].energia < 500){
-            grupo[id].direcao = 1
-            grupo[id].wandering = 0
-        }
-    }
-}
 canvas.addEventListener("click",function(){
     if( event.offsetX > 10 && event.offsetX < 10+70 && event.offsetY > 10 && event.offsetY < 10+40 ){
         grupo[grupo.length] = Object.create(animal)
