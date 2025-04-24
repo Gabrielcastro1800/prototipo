@@ -31,7 +31,6 @@ let ids = 0 // ids quantidade de objs no vetor grupo[]
 let water = [400,300,50,50] // temporario relacionado a localização da comida ou agua
 let velocidade = 30 // quantidade de milesegundos do fps não funciona por enquanto 
 let velocidadeswitch = 1 // relacionado ao botão de troca de velecidade não funciona por enquanto 
-setInterval(main,velocidade)// chama e repete a função do main() "principal" basicamente o fps do jogo/simulação
 let testsprite = new Image // carregando a imagem do animal
 testsprite.src = "1.png"
 let testtree = new Image
@@ -65,7 +64,8 @@ function main(){ // funcao principal do jogo
     c.fillText(velocidadeswitch+"x",120,80)
 
     c.drawImage(testtree,water[0],water[1],water[2],water[3])
-   
+    setTimeout(main,velocidade)// chama e repete a função do main() "principal" basicamente o fps do jogo/simulação
+
 }
 
 canvas.addEventListener("click",function(){
@@ -75,31 +75,28 @@ canvas.addEventListener("click",function(){
     if( event.offsetX > 10 && event.offsetX < 10+100 && event.offsetY > 60 && event.offsetY < 60+30 ){
         switch(velocidadeswitch){
             case 1: 
-                    velocidade = 15
+                    velocidade = 10
                     velocidadeswitch = 2
-                    clearInterval()
-                    setInterval(main,velocidade)
+                    
                     break;
             case 2:
-                velocidade = 10
+                velocidade = 5
                 velocidadeswitch = 3
-                clearInterval()
-                    setInterval(main,velocidade)
+            
                 break;
             case 3:
-                velocidade = 5
+                velocidade = 1
                 velocidadeswitch = 4
-                clearInterval()
-                    setInterval(main,velocidade)
+        
 
                 break
             case 4:
                 velocidade = 30
                 velocidadeswitch = 1
-                clearInterval()
-                    setInterval(main,velocidade)
+                
 
                 break;
         }
     }
 })
+main()
