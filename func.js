@@ -89,26 +89,6 @@ function coli(id){
     
     }
 }
-function direcao(id){
-    if(grupo[id].direcao == 1){
-        if(!(grupo[id].x > water[0] && grupo[id].x < water[2] && grupo[id].y > water[1] && grupo[id].x < water[4])){
-            if(grupo[id].x > water[0] ){
-                grupo[id].vx += 0.1
-            }
-            if(grupo[id].y > water[1] ){
-                grupo[id].vy += 0.1
-            }
-            if(grupo[id].x < water[0] ){
-                grupo[id].vx -= 0.1
-            }
-            if(grupo[id].y < water[1] ){
-                grupo[id].vy -= 0.1
-            }
-        }
-        
-    }
-}
-
 
 function visao(id){
     if(water[0] > grupo[id].x && water[0] < grupo[id].x+grupo[id].visao && water[1] > grupo[id].y && water[1] > grupo[id].y+grupo[id].visao){
