@@ -48,7 +48,6 @@ function main(){ // funcao principal do jogo
         wander(c1)
         wandering(c1)
         direc(c1)
-        direcao(c1)
         coli(c1)
         c.drawImage(testsprite,grupo[c1].x*zoom,grupo[c1].y*zoom,32*zoom,32*zoom)
         c.fillText(grupo[c1].direc+"/"+grupo[c1].direc2,grupo[c1].x*zoom,(grupo[c1].y+50)*zoom)
