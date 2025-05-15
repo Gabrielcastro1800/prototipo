@@ -8,7 +8,8 @@ const animal = { // objeto do animal base
     y:300,
     vx:0, // velocidade no eixo x
     vy:0, // velocidade no eixo y
-    direc:0, // direção do animal 0,1,2,3 
+    direc:0, // direção do animal 0,1
+    direc2:0,
     direccool:0, // cooldown para trocar a sua direção 
     wandering:0, // 1 se o animal esta andando sem rumo,0 se não
     wanderingcool:0,// cooldown para andar ou parar
@@ -25,13 +26,13 @@ const animal = { // objeto do animal base
 let grupo = []
 let zoom = 1
 
-for(c2=0;c2 < 15 ;c2++){ // temporario! enche um vetor com copias do obj animal 
+for(c2=0;c2 < 1 ;c2++){ // temporario! enche um vetor com copias do obj animal 
     grupo[c2] = Object.create(animal)
 }
 let ids = 0 // ids quantidade de objs no vetor grupo[]
 let water = [400,300,50,50] // temporario relacionado a localização da comida ou agua
 let velocidade = 30 // quantidade de milesegundos do fps não funciona por enquanto 
-let velocidadeswitch = 1 // relacionado ao botão de troca de velecidade não funciona por enquanto 
+let velocidadeswitch = 1 // relacionado ao botão de troca de velecidade  
 let testsprite = new Image // carregando a imagem do animal
 testsprite.src = "1.png"
 let testtree = new Image
@@ -44,12 +45,14 @@ function main(){ // funcao principal do jogo
     c.clearRect(0,0,1200,1200) // limpa a tela do jogo a cada frame
     for(c1=0;c1 < grupo.length ;c1++){ // chama as funcoes para cada animal
         visao(c1)
-        coli(c1)
         wander(c1)
         wandering(c1)
         direc(c1)
         direcao(c1)
-        c.drawImage(testsprite,grupo[c1].x,grupo[c1].y,32*zoom,32*zoom)
+        coli(c1)
+        c.drawImage(testsprite,grupo[c1].x*zoom,grupo[c1].y*zoom,32*zoom,32*zoom)
+        c.fillText(grupo[c1].direc+"/"+grupo[c1].direc2,grupo[c1].x*zoom,(grupo[c1].y+50)*zoom)
+        c.fillText(grupo[c1].x+"/"+grupo[c1].y,grupo[c1].x*zoom,(grupo[c1].y+70)*zoom)
         
     }
     c.fillStyle = "red"
@@ -64,7 +67,8 @@ function main(){ // funcao principal do jogo
     c.fillText("velocidade",10,80)
     c.fillText(velocidadeswitch+"x",120,80)
 
-    c.drawImage(testtree,water[0],water[1],water[2]*zoom,water[3]*zoom)
+    c.drawImage(testtree,water[0]*zoom,water[1]*zoom,water[2]*zoom,water[3]*zoom)
+   
     setTimeout(main,velocidade)// chama e repete a função do main() "principal" basicamente o fps do jogo/simulação
 
 }
@@ -103,10 +107,10 @@ canvas.addEventListener("click",function(){
 })
 document.addEventListener("keyup", function(){
 if(event.keyCode === 187){
-    zoom+=5
+    zoom+=2
 }
 if(event.keyCode === 189){
-    zoom-=5
+    zoom-=2
 }
 if(zoom < 0)
 {
