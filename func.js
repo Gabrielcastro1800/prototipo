@@ -69,8 +69,9 @@ function wandering(id){
 
 function coli(id){
     
-    if( grupo[id].x > 1170){
+    if( grupo[id].x > 1200){
         grupo[id].vx = 2
+        grupo[id].x = 1150
         
     }
     if( grupo[id].x < 50){
@@ -81,6 +82,7 @@ function coli(id){
     }
     if( grupo[id].y > 780){
         grupo[id].vy = -2
+        grupo[id].y = 750
 
     }
     if( grupo[id].y < 50){
