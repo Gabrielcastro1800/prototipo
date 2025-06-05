@@ -43,6 +43,8 @@ testtree.src = "treetemp.png"
 function main(){ // funcao principal do jogo
     ids = grupo.length
     c.clearRect(0,0,1200,1200) // limpa a tela do jogo a cada frame
+    c.fillStyle = "green"
+    c.fillRect(0,0,2000,2000)
     for(c1=0;c1 < grupo.length ;c1++){ // chama as funcoes para cada animal
         visao(c1)
         wander(c1)
