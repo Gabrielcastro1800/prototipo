@@ -81,10 +81,11 @@ function main(){ // funcao principal do jogo
         wandering(c1)
         direc(c1)
         coli(c1)
+        grupo[c1].energia -=1 
         c.drawImage(testsprite,grupo[c1].x*zoom,grupo[c1].y*zoom,32*zoom,32*zoom)
         if(pos == true){
             c.fillStyle = "Black"
-            c.fillText(grupo[c1].x+"|"+grupo[c1].y,grupo[c1].x*zoom,grupo[c1].y*zoom)
+            c.fillText(grupo[c1].direc+"|"+grupo[c1].direc2,grupo[c1].x*zoom,grupo[c1].y*zoom)
         }
         
     }

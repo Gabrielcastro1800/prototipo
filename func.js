@@ -4,13 +4,13 @@ function wander(id){
         if (grupo[id].direc == 1){
             grupo[id].vx += 0.1
         }
-        if (grupo[id].direc == 2){
+        if (grupo[id].direc == -1){
             grupo[id].vx -= 0.1
         }
         if (grupo[id].direc2 == 1){
             grupo[id].vy += 0.1
         }    
-        if (grupo[id].direc2 == 2){
+        if (grupo[id].direc2 == -1){
             grupo[id].vy -= 0.1
         }
 
@@ -30,7 +30,6 @@ function wander(id){
     if(grupo[id].vy < -1 ){
         grupo[id].vy = -1
     }
-    grupo[id].energia--
     grupo[id].x += grupo[id].vx
         grupo[id].y += grupo[id].vy
     
@@ -40,8 +39,8 @@ function wander(id){
 function direc(id){
     grupo[id].direccool +=1
     if(grupo[id].direccool > 50){
-        grupo[id].direc = Math.ceil(Math.random()*2)
-        grupo[id].direc2 = Math.ceil(Math.random()*2)
+        grupo[id].direc = Math.random() < 0.5 ? -1 : 1
+        grupo[id].direc2 = Math.random() < 0.5 ? -1 : 1
         grupo[id].direccool = 0
     }
     
@@ -69,27 +68,17 @@ function wandering(id){
 
 function coli(id){
     
-    if( grupo[id].x > 1200){
-        grupo[id].vx = 2
-        grupo[id].x = 1150
+    if( grupo[id].x >= 800 || grupo[id].x <= 100 ){
+        grupo[id].vx = grupo[id].vx*-1
+        grupo[id].direc = grupo[id].direc*-1
         
     }
-    if( grupo[id].x < 50){
-        grupo[id].vx = 2
-        grupo[id].x = 100
-
+    if( grupo[id].y >= 750 || grupo[id].y <= 100 ){
+        grupo[id].vy = grupo[id].vy*-1
+        grupo[id].direc2 = grupo[id].direc2*-1
         
     }
-    if( grupo[id].y > 780){
-        grupo[id].vy = -2
-        grupo[id].y = 750
-
-    }
-    if( grupo[id].y < 50){
-        grupo[id].vy = 2
-        grupo[id].y = 100
-    
-    }
+  
 }
 
 function visao(id){
