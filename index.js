@@ -1,6 +1,10 @@
 const canvas = document.getElementById("canvas");
 let c = canvas.getContext("2d"); //<--bagulhos do canvas
 
+
+const bgCanvas = document.createElement('canvas');
+const bgCtx = bgCanvas.getContext('2d');
+
 c.imageSmoothingEnabled = false // liga ou deslica a suavização das imagens do canvas horrivel para pixelart
 
 const animal = { // objeto do animal base
@@ -50,6 +54,12 @@ let sele = new Image
 sele.src = "sele.png"
 let sprite2 = new Image
 sprite2.src = "2.png"
+let grass = new Image();
+grass.src = "grass.png"
+
+
+
+
 let tela = 1
 let select = 1
 let pos = false
@@ -58,11 +68,18 @@ let pos = false
 
 
 function main(){ // funcao principal do jogo
-    ids = grupo.length
-    c.clearRect(0,0,1200,1200) // limpa a tela do jogo a cada frame
-     if(tela == 1){
 
-    c.fillStyle = "rgb(93, 212, 38)"
+    
+
+
+
+
+
+    ids = grupo.length
+    
+     if(tela == 1){
+  
+    c.fillStyle = "green"
     c.fillRect(0,0,2000,2000)
     c.drawImage(testsprite,480,100,128,128)
     c.drawImage(testtree,560,100,128,128)
@@ -85,15 +102,13 @@ function main(){ // funcao principal do jogo
 
 
     if(tela == 2){
-    c.fillStyle = "green"
-    c.fillRect(0,0,2000,2000)
+    c.drawImage(bgCanvas, 0, 0,canvas.width*zoom,canvas.height*zoom);
     for(c1=0;c1 < grupo.length ;c1++){ // chama as funcoes para cada animal
         visao(c1)
         wander(c1)
         wandering(c1)
         direc(c1)
         coli(c1)
-        grupo[c1].energia -=1 
 
         c.filter = "hue-rotate("+grupo[c1].cor+"deg)";
         if(grupo[c1].vx < 0){
@@ -235,4 +250,20 @@ if(event.keyCode === 13 && select == 1 && tela == 1){
 }
 }
 );
-main()
+
+
+
+grass.onload = () => {
+        bgCanvas.width = canvas.width;
+        bgCanvas.height = canvas.height;
+
+        const pattern = bgCtx.createPattern(grass, "repeat");
+        bgCtx.fillStyle = pattern;
+
+
+        bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
+        main()
+
+}
+
+
