@@ -26,6 +26,10 @@ const animal = { // objeto do animal base
     velocidade:1, // velodidade de movimento do animal ***
     tamanho: 1,
     cor: 0,
+    falando:0,
+    pensando:"",
+    falante:100,
+    f:false,
 };      
     //probriendades marcadas com *** são genes ou status que provavelmente serão auterados
     // de pai pra filhos
@@ -41,6 +45,7 @@ for(c2=0;c2 < 15 ;c2++){ // temporario! enche um vetor com copias do obj animal
     grupo[c2] = Object.create(animal)
     grupo[c2].tamanho += (Math.ceil(Math.random()*14))/10
     grupo[c2].cor += Math.floor(Math.random() * 511) - 255;
+    grupo[c2].falante += Math.floor(Math.random() * 10000) ;
 }
 let ids = 0 // ids quantidade de objs no vetor grupo[]
 let water = [400,300,50,50] // temporario relacionado a localização da comida ou agua
@@ -50,12 +55,118 @@ let testsprite = new Image // carregando a imagem do animal
 testsprite.src = "1.png"
 let testtree = new Image
 testtree.src = "treetemp.png"
+let falaimg = new Image
+falaimg.src = "talk.png"
+let fala2img = new Image
+fala2img.src = "talk2.png"
 let sele = new Image
 sele.src = "sele.png"
 let sprite2 = new Image
 sprite2.src = "2.png"
 let grass = new Image();
 grass.src = "grass.png"
+
+
+
+let falas = ["Vai corinthians!","é o que sobra?","Nem fudendo","alfa aqui tá?","beta!","jonas mo gay","ala teu pai",
+    "O que preferes?","mano tipo","Tipo bixo mesmo","oq tu acha?","antes de ir comer","Tranquilo","mo pas","n word","twiteiro medio","...",
+    "LADRÂO!","Ai, que delicia","Tu que é","tu que deixa","comeu miojo?","passa pano!","Odeio os verdes","Odeio os roxos",
+    "odeio os rosa","odeio os laranja","Seu bobão molhado",
+  "Seu banana gigante",
+  "Tolo sem noção",
+  "Cabeça de vento",
+  "Paspalho de marca",
+  "Bobalhão sem rumo",
+  "Zé ruela cansado",
+  "Palhaço de aluguel",
+  "Banana ambulante",
+  "Troço sem graça",
+  "Mala sem alça",
+  "Panaca de plantão",
+  "Chato pra caramba",
+  "Nó cego chato",
+  "Besta quadrada",
+  "Tranqueira sem futuro",
+  "Orelhudo de festa",
+  "Zé ninguém molhado",
+  "Cabeça de bagre",
+  "Mané de novela",
+  "Baranga de luxo",
+  "Lesado de carteirinha",
+  "Desenxabido sem classe",
+  "Pateta de esquina",
+  "Trombadinha de espuma",
+  "Bobalhão de sempre",
+  "Fiasco ambulante",
+  "Nababão sem limites",
+  "Aberração de bolso",
+  "Enjoado de fábrica",
+   "Gênio das galáxias",
+  "Lenda do caos",
+  "Brabo sem limites",
+  "Mito dos cafés",
+  "Fera dos cliques",
+  "Astro das tretas",
+  "Craque do improviso",
+  "Prodígio das piadas",
+  "Monstro do código",
+  "Sábio das ruas",
+  "Rei das gambis",
+  "Lord dos memes",
+  "Patrão da zoeira",
+  "Chefe das lendas",
+  "Majestade dos bugs",
+   "Titã das galáxias",
+  "Deus das planilhas",
+  "Messias dos memes",
+  "Imperador do caos",
+  "Dragão do carisma",
+  "Sabidão supremo intergaláctico",
+  "Monarca das tretas",
+  "Oráculo das piadas",
+  "Faraó do estilo",
+  "Colosso do talento",
+  "Demônio do charme",
+  "Gigante da sabedoria",
+  "Divindade do hype",
+  "Apocalipse do swag",
+  "Rei do impossível",
+    "Oi, bonitinho",
+  "E aí, encanto",
+  "Você brilha",
+  "Oi, charme",
+  "Fala, estrela",
+  "Oi, lindinha",
+  "Cheguei, sumido",
+  "Você encanta",
+  "Oi, beleza",
+  "Sua presença ilumina",
+  "Hey, fofura",
+  "Você é charme",
+  "Oi, crush",
+  "Me notou?",
+  "Gosto de você",
+   "E aí, charme",
+  "Oi, doce",
+  "Você fascina",
+  "Olá, sorriso",
+  "E aí, paixão",
+  "Oi, irresistível",
+  "Você hipnotiza",
+  "Olá, fofinho",
+  "Hey, gracinha",
+  "Que saudade",
+  "Você encanta mesmo",
+  "Oi, perfeição",
+  "Chega mais",
+  "Oi, preciosidade",
+  "Tudo bem, lindo?",
+  "jesus",
+  "grosso",
+  "feito",
+  "bao?",
+  "goku > ronaldo"
+]
 
 
 
@@ -113,15 +224,42 @@ function main(){ // funcao principal do jogo
         c.filter = "hue-rotate("+grupo[c1].cor+"deg)";
         if(grupo[c1].vx < 0){
             c.drawImage(testsprite,grupo[c1].x*zoom,(grupo[c1].y*zoom)+movezoomy,(32*zoom)*grupo[c1].tamanho,(32*zoom)*grupo[c1].tamanho)
+
         }
         if(grupo[c1].vx > 0){
             c.drawImage(sprite2,grupo[c1].x*zoom,(grupo[c1].y*zoom)+movezoomy,(32*zoom)*grupo[c1].tamanho,(32*zoom)*grupo[c1].tamanho)
+            
         }
         if(grupo[c1].vx == 0){
             c.drawImage(sprite2,grupo[c1].x*zoom,(grupo[c1].y*zoom)+movezoomy,(32*zoom)*grupo[c1].tamanho,(32*zoom)*grupo[c1].tamanho)
         }
-    
         c.filter = "none";
+        if(grupo[c1].f == true){
+    
+            c.drawImage(falaimg,(grupo[c1].x*zoom)+60,((grupo[c1].y*zoom)+movezoomy)-50,128,64)
+            c.fillStyle = "rgba(9, 9, 9, 1)"
+            c.font = "14px Asimovian"
+            c.fillText(grupo[c1].pensando,(grupo[c1].x*zoom)+71,((grupo[c1].y*zoom)+movezoomy-15))
+
+
+            
+        }
+        grupo[c1].falando+=1
+
+        if(grupo[c1].falando > grupo[c1].falante && grupo[c1].f == false){
+            grupo[c1].falando = 0
+            grupo[c1].f = true
+            grupo[c1].pensando = falas[Math.ceil(Math.random()*falas.length-1)]
+        }
+        if(grupo[c1].falando > grupo[c1].falante && grupo[c1].f == true){
+            grupo[c1].falando = 0
+            grupo[c1].f = false
+        }
+
+
+
+    
+        
 
   
 
@@ -172,6 +310,7 @@ canvas.addEventListener("click",function(){
         grupo[grupo.length] = Object.create(animal)
         grupo[grupo.length-1].tamanho += (Math.ceil(Math.random()*14))/10
          grupo[grupo.length-1].cor += Math.floor(Math.random() * 511) - 255;
+         grupo[grupo.length-1].falante += Math.floor(Math.random() * 10000) ;
 
     }
     if( event.offsetX > 10 && event.offsetX < 10+120 && event.offsetY > 100 && event.offsetY < 100+30 ){
