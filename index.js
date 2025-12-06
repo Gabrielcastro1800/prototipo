@@ -27,9 +27,16 @@ const animal = { // objeto do animal base
     // de pai pra filhos
 let grupo = []
 let zoom = 1
+let cormedia = 0
+let tamamedio = 0
+let au =0
+let movezoomx = 0
+let movezoomy = 0
 
-for(c2=0;c2 < 1 ;c2++){ // temporario! enche um vetor com copias do obj animal 
+for(c2=0;c2 < 15 ;c2++){ // temporario! enche um vetor com copias do obj animal 
     grupo[c2] = Object.create(animal)
+    grupo[c2].tamanho += (Math.ceil(Math.random()*14))/10
+    grupo[c2].cor += Math.floor(Math.random() * 511) - 255;
 }
 let ids = 0 // ids quantidade de objs no vetor grupo[]
 let water = [400,300,50,50] // temporario relacionado a localização da comida ou agua
@@ -41,9 +48,12 @@ let testtree = new Image
 testtree.src = "treetemp.png"
 let sele = new Image
 sele.src = "sele.png"
+let sprite2 = new Image
+sprite2.src = "2.png"
 let tela = 1
 let select = 1
 let pos = false
+
 
 
 
@@ -86,7 +96,16 @@ function main(){ // funcao principal do jogo
         grupo[c1].energia -=1 
 
         c.filter = "hue-rotate("+grupo[c1].cor+"deg)";
-        c.drawImage(testsprite,grupo[c1].x*zoom,grupo[c1].y*zoom,(32*zoom)*grupo[c1].tamanho,(32*zoom)*grupo[c1].tamanho)
+        if(grupo[c1].vx < 0){
+            c.drawImage(testsprite,grupo[c1].x*zoom,(grupo[c1].y*zoom)+movezoomy,(32*zoom)*grupo[c1].tamanho,(32*zoom)*grupo[c1].tamanho)
+        }
+        if(grupo[c1].vx > 0){
+            c.drawImage(sprite2,grupo[c1].x*zoom,(grupo[c1].y*zoom)+movezoomy,(32*zoom)*grupo[c1].tamanho,(32*zoom)*grupo[c1].tamanho)
+        }
+        if(grupo[c1].vx == 0){
+            c.drawImage(sprite2,grupo[c1].x*zoom,(grupo[c1].y*zoom)+movezoomy,(32*zoom)*grupo[c1].tamanho,(32*zoom)*grupo[c1].tamanho)
+        }
+    
         c.filter = "none";
 
   
@@ -112,12 +131,23 @@ function main(){ // funcao principal do jogo
     c.fillText("posição teste",10,120)
 
     c.drawImage(testtree,water[0]*zoom,water[1]*zoom,water[2]*zoom,water[3]*zoom)
-     c.drawImage(testtree,580,100,64,64)
-          c.drawImage(testtree,320,150,64,64)
+     c.drawImage(testtree,580*zoom,100*zoom,64*zoom,64*zoom)
+          c.drawImage(testtree,320*zoom,150*zoom,64*zoom,64*zoom)
 
-               c.drawImage(testtree,680,220,64,64)
+               c.drawImage(testtree,680*zoom,220*zoom,64*zoom,64*zoom)
 
 }
+        if(tela == 3){
+            c.fillStyle = "black"
+            c.font = "30px Arial"
+            c.fillText("Media de cor "+cormedia,30,30)
+            c.fillText("Media de tamanho "+tamamedio,30,60)
+
+            c.filter = "hue-rotate("+cormedia+"deg)";
+            c.drawImage(testsprite,100,100,150,150)
+            c.filter = "none";
+
+        }
     setTimeout(main,velocidade)// chama e repete a função do main() "principal" basicamente o fps do jogo/simulação
 
 }
@@ -141,50 +171,66 @@ canvas.addEventListener("click",function(){
                     
                     break;
             case 2:
-                velocidade = 5
+                velocidade = 1
                 velocidadeswitch = 3
             
                 break;
             case 3:
-                velocidade = 1
-                velocidadeswitch = 4
+                velocidade = 30
+                velocidadeswitch = 1
         
 
                 break
-            case 4:
-                velocidade = 30
-                velocidadeswitch = 1
-                
-
-                break;
         }
     }
 
 })
 document.addEventListener("keyup", function(){
-if(event.keyCode === 187){
-    zoom+=2
+if(event.keyCode === 38 && tela == 2 && !(zoom == 1)){
+    movezoomy-=15
+    if(movezoomy < -800){
+        movezoomy = 0
+    }
 }
-if(event.keyCode === 189){
-    zoom-=2
+if(event.keyCode === 40 && tela == 2 && !(zoom == 1)){
+    movezoomy+=15
+     if(movezoomy > 0){
+        movezoomy = 0
+    }
 }
-if(zoom < 0)
+
+
+
+if(event.keyCode === 187  && tela == 2){
+    zoom+=1
+    if(zoom > 5)
+{
+    zoom = 5
+}
+}
+if(event.keyCode === 189  && tela == 2){
+    zoom-=1
+    if(zoom == 0)
 {
     zoom = 1
 }
-if(event.keyCode === 40){
+    
+}
+
+
+if(event.keyCode === 40 && tela == 1){
 select +=1
 if(select > 2){
     select = 1
 }
 }
-if(event.keyCode === 38){
+if(event.keyCode === 38 && tela == 1){
 select -=1
 if(select < 1){
     select = 2
 }
 }
-if(event.keyCode === 13 && select == 1){
+if(event.keyCode === 13 && select == 1 && tela == 1){
     tela = 2
 }
 }

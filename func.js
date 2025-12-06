@@ -89,3 +89,29 @@ function visao(id){
         }
     }
 }
+function media(){
+     au = 0
+    while(au < grupo.length){
+
+        cormedia = cormedia+grupo[au].cor
+        au+=1
+
+    }
+    cormedia = cormedia/grupo.length
+    cormedia = Math.ceil(cormedia)
+     au = 0
+    while(au < grupo.length){
+
+        tamamedio = tamamedio+grupo[au].tamanho
+        au+=1
+
+    }
+    tamamedio = tamamedio/grupo.length
+    tamamedio = Math.ceil(tamamedio)
+
+}
+function test(){
+    media()
+    tela = 3
+}
+
