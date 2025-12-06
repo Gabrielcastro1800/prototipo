@@ -20,7 +20,8 @@ const animal = { // objeto do animal base
     aguamaximo:1000, // maximo de agua ***
     visao:100, // alcance da visão do animal ***
     velocidade:1, // velodidade de movimento do animal ***
-    tamanho: 1
+    tamanho: 1,
+    cor: 0,
 };      
     //probriendades marcadas com *** são genes ou status que provavelmente serão auterados
     // de pai pra filhos
@@ -83,7 +84,13 @@ function main(){ // funcao principal do jogo
         direc(c1)
         coli(c1)
         grupo[c1].energia -=1 
+
+        c.filter = "hue-rotate("+grupo[c1].cor+"deg)";
         c.drawImage(testsprite,grupo[c1].x*zoom,grupo[c1].y*zoom,(32*zoom)*grupo[c1].tamanho,(32*zoom)*grupo[c1].tamanho)
+        c.filter = "none";
+
+  
+
         if(pos == true){
             c.fillStyle = "Black"
             c.fillText(grupo[c1].direc+"|"+grupo[c1].direc2,grupo[c1].x*zoom,grupo[c1].y*zoom)
@@ -118,7 +125,9 @@ function main(){ // funcao principal do jogo
 canvas.addEventListener("click",function(){
     if( event.offsetX > 10 && event.offsetX < 10+70 && event.offsetY > 10 && event.offsetY < 10+40 ){
         grupo[grupo.length] = Object.create(animal)
-        grupo[grupo.length-1].tamanho += (Math.ceil(Math.random()*14))/10 
+        grupo[grupo.length-1].tamanho += (Math.ceil(Math.random()*14))/10
+         grupo[grupo.length-1].cor += Math.floor(Math.random() * 511) - 255;
+
     }
     if( event.offsetX > 10 && event.offsetX < 10+120 && event.offsetY > 100 && event.offsetY < 100+30 ){
         pos = !pos
