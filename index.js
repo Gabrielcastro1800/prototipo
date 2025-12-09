@@ -41,6 +41,9 @@ let au =0
 let movezoomx = 0
 let movezoomy = 0
 
+
+let drawarvore = false
+
 for(c2=0;c2 < 15 ;c2++){ // temporario! enche um vetor com copias do obj animal 
     grupo[c2] = Object.create(animal)
     grupo[c2].tamanho += (Math.ceil(Math.random()*14))/10
@@ -49,7 +52,16 @@ for(c2=0;c2 < 15 ;c2++){ // temporario! enche um vetor com copias do obj animal
 }
 let ids = 0 // ids quantidade de objs no vetor grupo[]
 let water = [400,300,50,50] // temporario relacionado a localização da comida ou agua
-let velocidade = 30 // quantidade de milesegundos do fps não funciona por enquanto 
+
+
+let objetos = []
+
+
+
+
+
+
+let velocidade = 30 
 let velocidadeswitch = 1 // relacionado ao botão de troca de velecidade  
 let testsprite = new Image // carregando a imagem do animal
 testsprite.src = "1.png"
@@ -67,6 +79,11 @@ let grass = new Image();
 grass.src = "grass.png"
 
 
+const arvore = {
+    x:0,
+    y:0,
+    srite:testtree
+}
 
 let falas = ["Vai corinthians!","é o que sobra?","Nem fudendo","alfa aqui tá?","beta!","jonas mo gay","ala teu pai",
     "O que preferes?","mano tipo","Tipo bixo mesmo","oq tu acha?","antes de ir comer","Tranquilo","mo pas","n word","twiteiro medio","...",
@@ -283,11 +300,28 @@ function main(){ // funcao principal do jogo
     c.fillText(velocidadeswitch+"x",120,80)
     c.fillText("posição teste",10,120)
 
-    c.drawImage(testtree,water[0]*zoom,water[1]*zoom,water[2]*zoom,water[3]*zoom)
-     c.drawImage(testtree,580*zoom,100*zoom,64*zoom,64*zoom)
-          c.drawImage(testtree,320*zoom,150*zoom,64*zoom,64*zoom)
 
-               c.drawImage(testtree,680*zoom,220*zoom,64*zoom,64*zoom)
+    for(c1=0;c1 < objetos.length ;c1++){
+        
+            c.drawImage(testtree,objetos[c1].x*zoom,objetos[c1].y*zoom,64,64)
+    }
+
+
+    if(drawarvore == false){
+            c.fillStyle = "red"
+            c.fillRect(10,160,80,80)
+    }
+    if(drawarvore == true){
+            c.fillStyle = "gray"
+            c.fillRect(10,160,80,80)
+    }
+
+
+    c.drawImage(testtree,10,160,64,64)
+
+
+
+  
 
 }
         if(tela == 3){
@@ -336,6 +370,17 @@ canvas.addEventListener("click",function(){
 
                 break
         }
+    }
+
+    if( event.offsetX > 10 && event.offsetX < 10+80 && event.offsetY > 160 && event.offsetY < 160+80 && tela == 2 ){
+        drawarvore = !drawarvore
+    }
+
+    if( !(event.offsetX > 10 && event.offsetX < 10+80 && event.offsetY > 160 && event.offsetY < 160+80) && tela == 2 && drawarvore == true){
+        objetos[objetos.length] = Object.create(arvore)
+         objetos[objetos.length-1].x = event.offsetX-32
+         console.log(objetos[0].x)
+         objetos[objetos.length-1].y = event.offsetY-32
     }
 
 })
