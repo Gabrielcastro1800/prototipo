@@ -30,6 +30,8 @@ const animal = { // objeto do animal base
     pensando:"",
     falante:100,
     f:false,
+    frame:1,
+    frameau:0
 };      
     //probriendades marcadas com *** são genes ou status que provavelmente serão auterados
     // de pai pra filhos
@@ -63,20 +65,41 @@ let objetos = []
 
 let velocidade = 30 
 let velocidadeswitch = 1 // relacionado ao botão de troca de velecidade  
-let testsprite = new Image // carregando a imagem do animal
-testsprite.src = "1.png"
+
 let testtree = new Image
-testtree.src = "treetemp.png"
+testtree.src = "sprites/natural/arv.png"
 let falaimg = new Image
-falaimg.src = "talk.png"
+falaimg.src = "sprites/efeitos/talk.png"
 let fala2img = new Image
-fala2img.src = "talk2.png"
+fala2img.src = "sprites/efeitos/talk2.png"
 let sele = new Image
-sele.src = "sele.png"
+sele.src = "sprites/bota/sele.png"
+
+
+let sprite1 = new Image // carregando a imagem do animal
+sprite1.src = "sprites/animal/1.png"
 let sprite2 = new Image
-sprite2.src = "2.png"
+sprite2.src = "sprites/animal/2.png"
+let sprite3 = new Image
+sprite3.src = "sprites/animal/3.png"
+
+
+let sprite4 = new Image
+sprite4.src = "sprites/animal/4.png"
+let sprite5 = new Image
+sprite5.src = "sprites/animal/5.png"
+let sprite6 = new Image
+sprite6.src = "sprites/animal/6.png"
+
+
+
+
+
 let grass = new Image();
-grass.src = "grass.png"
+grass.src = "sprites/natural/grass.png"
+
+let titulo = new Image();
+titulo.src = "sprites/efeitos/titulo.png"
 
 
 const arvore = {
@@ -206,21 +229,20 @@ function main(){ // funcao principal do jogo
     ids = grupo.length
     
      if(tela == 1){
+        
+     c.drawImage(bgCanvas, 0, 0,canvas.width*zoom,canvas.height*zoom);
+
+     c.drawImage(titulo,200,0,800,400)
   
-    c.fillStyle = "green"
-    c.fillRect(0,0,2000,2000)
-    c.drawImage(testsprite,480,100,128,128)
-    c.drawImage(testtree,560,100,128,128)
-    c.drawImage(testtree,380,100,128,128)
      c.fillStyle = "rgba(17, 122, 161, 1)"
      c.font = "50px Asimovian"
-     c.fillText("Começar nova",400,400)
-     c.fillText("Graficos",400,480)
+     c.fillText("Começar nova",400,480)
+     c.fillText("Graficos",400,560)
      if(select == 1){
-        c.drawImage(sele,330,350,64,64)
+        c.drawImage(sele,330,430,64,64)
      }
      if(select == 2){
-        c.drawImage(sele,330,430,64,64)
+        c.drawImage(sele,330,510,64,64)
      }
      c.fillStyle = "rgba(9, 9, 9, 1)"
      c.font = "25px Asimovian"
@@ -240,15 +262,43 @@ function main(){ // funcao principal do jogo
 
         c.filter = "hue-rotate("+grupo[c1].cor+"deg)";
         if(grupo[c1].vx < 0){
-            c.drawImage(testsprite,grupo[c1].x*zoom,(grupo[c1].y*zoom)+movezoomy,(32*zoom)*grupo[c1].tamanho,(32*zoom)*grupo[c1].tamanho)
+
+            switch(grupo[c1].frame){
+
+                case 1:
+                 c.drawImage(sprite1,grupo[c1].x*zoom,(grupo[c1].y*zoom)+movezoomy,(32*zoom)*grupo[c1].tamanho,(32*zoom)*grupo[c1].tamanho)
+                    break;
+                 case 2:
+                 c.drawImage(sprite2,grupo[c1].x*zoom,(grupo[c1].y*zoom)+movezoomy,(32*zoom)*grupo[c1].tamanho,(32*zoom)*grupo[c1].tamanho)
+                    break;
+
+                case 3:
+                 c.drawImage(sprite3,grupo[c1].x*zoom,(grupo[c1].y*zoom)+movezoomy,(32*zoom)*grupo[c1].tamanho,(32*zoom)*grupo[c1].tamanho)
+                    break;
+            }
+           
 
         }
         if(grupo[c1].vx > 0){
-            c.drawImage(sprite2,grupo[c1].x*zoom,(grupo[c1].y*zoom)+movezoomy,(32*zoom)*grupo[c1].tamanho,(32*zoom)*grupo[c1].tamanho)
-            
+
+             switch(grupo[c1].frame){
+                    
+                case 1:
+                c.drawImage(sprite4,grupo[c1].x*zoom,(grupo[c1].y*zoom)+movezoomy,(32*zoom)*grupo[c1].tamanho,(32*zoom)*grupo[c1].tamanho)
+                break;
+
+                case 2:
+                c.drawImage(sprite5,grupo[c1].x*zoom,(grupo[c1].y*zoom)+movezoomy,(32*zoom)*grupo[c1].tamanho,(32*zoom)*grupo[c1].tamanho)
+                break;
+                case 3:
+                c.drawImage(sprite6,grupo[c1].x*zoom,(grupo[c1].y*zoom)+movezoomy,(32*zoom)*grupo[c1].tamanho,(32*zoom)*grupo[c1].tamanho)
+                break;
+             }
+
+          
         }
         if(grupo[c1].vx == 0){
-            c.drawImage(sprite2,grupo[c1].x*zoom,(grupo[c1].y*zoom)+movezoomy,(32*zoom)*grupo[c1].tamanho,(32*zoom)*grupo[c1].tamanho)
+            c.drawImage(sprite4,grupo[c1].x*zoom,(grupo[c1].y*zoom)+movezoomy,(32*zoom)*grupo[c1].tamanho,(32*zoom)*grupo[c1].tamanho)
         }
         c.filter = "none";
         if(grupo[c1].f == true){
@@ -262,6 +312,9 @@ function main(){ // funcao principal do jogo
             
         }
         grupo[c1].falando+=1
+        grupo[c1].frameau+=1
+        if(grupo[c1].frameau > 4){grupo[c1].frame+=1; grupo[c1].frameau = 0 }
+        if(grupo[c1].frame > 3){grupo[c1].frame = 1}
 
         if(grupo[c1].falando > grupo[c1].falante && grupo[c1].f == false){
             grupo[c1].falando = 0
