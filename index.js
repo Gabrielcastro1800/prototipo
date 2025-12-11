@@ -15,13 +15,11 @@ const animal = { // objeto do animal base
     direc:0, // direção do animal 0,1
     direc2:0,
     direccool:0, // cooldown para trocar a sua direção 
-    wandering:0, // 1 se o animal esta andando sem rumo,0 se não
+    wandering:1, // 1 se o animal esta andando sem rumo,0 se não
     wanderingcool:0,// cooldown para andar ou parar
     direcao:0, // se o animal está indo a algum lugar(exemplo comida)
     energia:1000, // quantidade atual de energia diminui com tempo
     maxenergia:1000, // maximo de energia ***
-    agua:1000, // quantidade atual de agua diminui com tempo
-    aguamaximo:1000, // maximo de agua ***
     visao:100, // alcance da visão do animal ***
     velocidade:1, // velodidade de movimento do animal ***
     tamanho: 1,
@@ -39,7 +37,7 @@ let grupo = []
 let zoom = 1
 let cormedia = 0
 let tamamedio = 0
-let au =0
+let au = 0
 let movezoomx = 0
 let movezoomy = 0
 
@@ -49,8 +47,10 @@ let drawarvore = false
 for(c2=0;c2 < 15 ;c2++){ // temporario! enche um vetor com copias do obj animal 
     grupo[c2] = Object.create(animal)
     grupo[c2].tamanho += (Math.ceil(Math.random()*14))/10
-    grupo[c2].cor += Math.floor(Math.random() * 511) - 255;
-    grupo[c2].falante += Math.floor(Math.random() * 10000) ;
+    grupo[c2].cor = Math.floor(Math.random() * 511) - 255;
+    grupo[c2].falante = Math.floor(Math.random() * 10000);
+    grupo[c2].velocidade = (Math.random() * 5)
+     
 }
 let ids = 0 // ids quantidade de objs no vetor grupo[]
 let water = [400,300,50,50] // temporario relacionado a localização da comida ou agua
@@ -254,9 +254,7 @@ function main(){ // funcao principal do jogo
     if(tela == 2){
     c.drawImage(bgCanvas, 0, 0,canvas.width*zoom,canvas.height*zoom);
     for(c1=0;c1 < grupo.length ;c1++){ // chama as funcoes para cada animal
-        visao(c1)
         wander(c1)
-        wandering(c1)
         direc(c1)
         coli(c1)
 
@@ -335,7 +333,7 @@ function main(){ // funcao principal do jogo
 
         if(pos == true){
             c.fillStyle = "Black"
-            c.fillText(grupo[c1].direc+"|"+grupo[c1].direc2,grupo[c1].x*zoom,grupo[c1].y*zoom)
+            c.fillText(grupo[c1].velocidade,grupo[c1].x*zoom,grupo[c1].y*zoom)
         }
         
     }
@@ -396,8 +394,10 @@ canvas.addEventListener("click",function(){
     if( event.offsetX > 10 && event.offsetX < 10+70 && event.offsetY > 10 && event.offsetY < 10+40 ){
         grupo[grupo.length] = Object.create(animal)
         grupo[grupo.length-1].tamanho += (Math.ceil(Math.random()*14))/10
-         grupo[grupo.length-1].cor += Math.floor(Math.random() * 511) - 255;
-         grupo[grupo.length-1].falante += Math.floor(Math.random() * 10000) ;
+         grupo[grupo.length-1].cor = Math.floor(Math.random() * 511) - 255;
+         grupo[grupo.length-1].falante = Math.floor(Math.random() * 10000) ;
+         grupo[grupo.length-1].velocidade = (Math.random() * 5)
+         
 
     }
     if( event.offsetX > 10 && event.offsetX < 10+120 && event.offsetY > 100 && event.offsetY < 100+30 ){
