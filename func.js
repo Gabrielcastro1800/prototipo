@@ -1,23 +1,25 @@
 function wander(id){
-    if(grupo[id].wandering == 1)
-    {
-        if (grupo[id].direc == 1){
-            grupo[id].vx = grupo[id].vx+0.1
-        }
-        if (grupo[id].direc == -1){
-            grupo[id].vx = grupo[id].vx-0.1
-        }
-        if (grupo[id].direc2 == 1){
-            grupo[id].vy = grupo[id].vy+0.1
-        }    
-        if (grupo[id].direc2 == -1){
-            grupo[id].vy = grupo[id].vy-0.1
-        }
+
+        
+    if(grupo[id].x < grupo[id].objetivox){
+        grupo[id].vx+=0.1
+    }
+    if(grupo[id].x > grupo[id].objetivox){
+        grupo[id].vx-=0.1
+    }
+    if(grupo[id].y < grupo[id].objetivoy){
+        grupo[id].vy+=0.1
+    }
+    if(grupo[id].y > grupo[id].objetivoy){
+        grupo[id].vy-=0.1
+    }
+
+
+
+
+
 
     
-       
-        
-    }
     if(grupo[id].vx > grupo[id].velocidade ){
         grupo[id].vx = grupo[id].velocidade
     }
@@ -36,36 +38,10 @@ function wander(id){
     
 }
 
-function direc(id){
-    grupo[id].direccool +=1
-    if(grupo[id].direccool > 30+grupo[id].velocidade*15){
-        grupo[id].direc = Math.random() < 0.5 ? -1 : 1
-        grupo[id].direc2 = Math.random() < 0.5 ? -1 : 1
-        grupo[id].direccool = 0
-    }
-    
-    
-}
 
 
 
-function coli(id){
-    
-    if( grupo[id].x >= 800 || grupo[id].x <= 100 ){
-        grupo[id].vx = grupo[id].vx*-1
-        grupo[id].direc = grupo[id].direc*-1
-       
 
-        
-    }
-    if( grupo[id].y >= 750 || grupo[id].y <= 100 ){
-        grupo[id].vy = grupo[id].vy*-1
-        grupo[id].direc2 = grupo[id].direc2*-1
-     
-        
-    }
-  
-}
 
 function media(){
      au = 0
@@ -92,6 +68,57 @@ function test(){
     media()
     tela = 3
 }
+
+
+function objetivo(id){
+
+    grupo[id].objetivox = Math.floor(Math.random() * 900)
+    grupo[id].objetivoy = Math.floor(Math.random() * 500)
+
+
+
+    grupo[id].objetivocool = 600
+}
+function objetivocomida(id){
+    arvcomcomida = []
+    au = [Infinity,Infinity]
+    au2 = 0
+    au3 = []
+    if(arv.length > 0){
+         for(c6=0;c6 < arv.length;c6++){
+        if(arv[c6].comida == 1000){
+             arvcomcomida[(arvcomcomida.length)] = [arv[c6].x,arv[c6].y]
+             au3[au3.length] = c6
+        }
+    }
+     for(c6=0;c6 < arvcomcomida.length;c6++){
   
+        if((arvcomcomida[c6][0]**2 + arvcomcomida[c6][1]**2) < (au[0]**2+au[1]**2)){
+            au = [arvcomcomida[c6][0], arvcomcomida[c6][1]]
+            au2 = c6        
+        }
+        
+     }
+     if(arvcomcomida.length > 0){
+        grupo[id].objetivox = au[0]
+        grupo[id].objetivoy = au[1]
+
+        if(grupo[id].x >= arvcomcomida[au2][0] && grupo[id].x <= arvcomcomida[au2][0]+64 && grupo[id].y >= arvcomcomida[au2][1] &&  grupo[id].y <= arvcomcomida[au2][1]+64){
+            arv[au3[au2]].comida = 0
+            grupo[id].energia += 2000
+
+        }
+
+     }
+
+    }
 
 
+
+
+
+    if(arvcomcomida.length == 0){
+        objetivo(id)
+    }
+
+}

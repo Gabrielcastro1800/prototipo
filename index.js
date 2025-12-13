@@ -12,14 +12,9 @@ const animal = { // objeto do animal base
     y:300,
     vx:0, // velocidade no eixo x
     vy:0, // velocidade no eixo y
-    direc:0, // direção do animal 0,1
-    direc2:0,
-    direccool:0, // cooldown para trocar a sua direção 
-    wandering:1, // 1 se o animal esta andando sem rumo,0 se não
-    wanderingcool:0,// cooldown para andar ou parar
-    direcao:0, // se o animal está indo a algum lugar(exemplo comida)
-    energia:1000, // quantidade atual de energia diminui com tempo
-    maxenergia:1000, // maximo de energia ***
+    objetivocool: 0,
+    energia:9000, // quantidade atual de energia diminui com tempo
+    maxenergia:16000, // maximo de energia ***
     visao:100, // alcance da visão do animal ***
     velocidade:1, // velodidade de movimento do animal ***
     tamanho: 1,
@@ -29,7 +24,14 @@ const animal = { // objeto do animal base
     falante:100,
     f:false,
     frame:1,
-    frameau:0
+    frameau:0,
+    morto:false,
+    objetivox:0,
+    objetivoy:0,
+    violento: 0,
+    bonito: 0,
+    
+
 };      
     //probriendades marcadas com *** são genes ou status que provavelmente serão auterados
     // de pai pra filhos
@@ -47,7 +49,7 @@ let drawarvore = false
 for(c2=0;c2 < 15 ;c2++){ // temporario! enche um vetor com copias do obj animal 
     grupo[c2] = Object.create(animal)
     grupo[c2].tamanho += (Math.ceil(Math.random()*14))/10
-    grupo[c2].cor = Math.floor(Math.random() * 511) - 255;
+    grupo[c2].cor = Math.floor(Math.random() * 255);
     grupo[c2].falante = Math.floor(Math.random() * 10000);
     grupo[c2].velocidade = (Math.random() * 5)
      
@@ -107,7 +109,7 @@ titulo.src = "sprites/efeitos/titulo.png"
 const arvore = {
     x:0,
     y:0,
-    comida:0
+    comida:1000
 }
 
 let falas = ["Vai corinthians!","é o que sobra?","Nem fudendo","alfa aqui tá?","beta!","jonas mo gay","ala teu pai",
@@ -256,9 +258,25 @@ function main(){ // funcao principal do jogo
     if(tela == 2){
     c.drawImage(bgCanvas, 0, 0,canvas.width*zoom,canvas.height*zoom);
     for(c1=0;c1 < grupo.length ;c1++){ // chama as funcoes para cada animal
+        
+        if(grupo[c1].morto == false){
+        
+        if(grupo[c1].objetivocool < 0 && grupo[c1].energia > grupo[c1].maxenergia/2){objetivo(c1)}
+        if(grupo[c1].objetivocool < 0 && grupo[c1].energia < grupo[c1].maxenergia/2){objetivocomida(c1)}
+        grupo[c1].objetivocool--
+
         wander(c1)
-        direc(c1)
-        coli(c1)
+   
+
+        grupo[c1].energia-=1
+
+           // if(grupo[c1].energia < (grupo[c1].maxenergia/2)){
+           //     grupo[c1].wandering = 0
+           //     comer(c1)
+           // }
+        
+
+
 
         c.filter = "hue-rotate("+grupo[c1].cor+"deg)";
         if(grupo[c1].vx < 0){
@@ -335,9 +353,11 @@ function main(){ // funcao principal do jogo
 
         if(pos == true){
             c.fillStyle = "Black"
-            c.fillText(grupo[c1].velocidade,grupo[c1].x*zoom,grupo[c1].y*zoom)
+            c.fillText(grupo[c1].energia,grupo[c1].x*zoom,grupo[c1].y*zoom)
         }
-        
+
+        }
+    
     }
     c.fillStyle = "red"
     c.fillRect(10,10,70,40)
@@ -406,7 +426,7 @@ canvas.addEventListener("click",function(){
     if( event.offsetX > 10 && event.offsetX < 10+70 && event.offsetY > 10 && event.offsetY < 10+40 ){
         grupo[grupo.length] = Object.create(animal)
         grupo[grupo.length-1].tamanho += (Math.ceil(Math.random()*14))/10
-         grupo[grupo.length-1].cor = Math.floor(Math.random() * 511) - 255;
+         grupo[grupo.length-1].cor = Math.floor(Math.random() * 255);
          grupo[grupo.length-1].falante = Math.floor(Math.random() * 10000) ;
          grupo[grupo.length-1].velocidade = (Math.random() * 5)
          
