@@ -56,7 +56,7 @@ let ids = 0 // ids quantidade de objs no vetor grupo[]
 let water = [400,300,50,50] // temporario relacionado a localização da comida ou agua
 
 
-let objetos = []
+let arv = []
 
 
 
@@ -68,6 +68,8 @@ let velocidadeswitch = 1 // relacionado ao botão de troca de velecidade
 
 let testtree = new Image
 testtree.src = "sprites/natural/arv.png"
+let testtree2 = new Image
+testtree2.src = "sprites/natural/arv2.png"
 let falaimg = new Image
 falaimg.src = "sprites/efeitos/talk.png"
 let fala2img = new Image
@@ -105,7 +107,7 @@ titulo.src = "sprites/efeitos/titulo.png"
 const arvore = {
     x:0,
     y:0,
-    srite:testtree
+    comida:0
 }
 
 let falas = ["Vai corinthians!","é o que sobra?","Nem fudendo","alfa aqui tá?","beta!","jonas mo gay","ala teu pai",
@@ -352,9 +354,19 @@ function main(){ // funcao principal do jogo
     c.fillText("posição teste",10,120)
 
 
-    for(c1=0;c1 < objetos.length ;c1++){
-        
-            c.drawImage(testtree,objetos[c1].x*zoom,objetos[c1].y*zoom,64,64)
+    for(c1=0;c1 < arv.length ;c1++){
+
+            arv[c1].comida+=1
+            if(arv[c1].comida > 1000){arv[c1].comida = 1000}
+
+
+            if(arv[c1].comida < 1000){
+                c.drawImage(testtree,arv[c1].x*zoom,arv[c1].y*zoom,64,64)
+            }else{
+                c.drawImage(testtree2,arv[c1].x*zoom,arv[c1].y*zoom,64,64)
+            }
+            
+
     }
 
 
@@ -386,7 +398,7 @@ function main(){ // funcao principal do jogo
             c.filter = "none";
 
         }
-    setTimeout(main,velocidade)// chama e repete a função do main() "principal" basicamente o fps do jogo/simulação
+    setTimeout(main,velocidade)// chama e repete a função do main() "principal"
 
 }
 
@@ -430,10 +442,9 @@ canvas.addEventListener("click",function(){
     }
 
     if( !(event.offsetX > 10 && event.offsetX < 10+80 && event.offsetY > 160 && event.offsetY < 160+80) && tela == 2 && drawarvore == true){
-        objetos[objetos.length] = Object.create(arvore)
-         objetos[objetos.length-1].x = event.offsetX-32
-         console.log(objetos[0].x)
-         objetos[objetos.length-1].y = event.offsetY-32
+        arv[arv.length] = Object.create(arvore)
+         arv[arv.length-1].x = event.offsetX-32
+         arv[arv.length-1].y = event.offsetY-32
     }
 
 })
