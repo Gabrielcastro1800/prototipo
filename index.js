@@ -54,6 +54,7 @@ let diastic = 0
 
 let drawarvore = false
 let Populacao = 0
+let causa = ""
 
 for(c2=0;c2 < 15 ;c2++){ 
     grupo[c2] = Object.create(animal)
@@ -149,8 +150,8 @@ function main(){ // funcao principal do jogo
 
     c.drawImage(bgCanvas, 0, 0,canvas.width*zoom,canvas.height*zoom);
     for(c1=0;c1 < grupo.length ;c1++){ // chama as funcoes para cada animal
-        if(grupo[c1].energia <= 0){grupo[c1].morto = true}
-         if(grupo[c1].idade >= grupo[c1].idademax){grupo[c1].morto = true}
+        if(grupo[c1].energia <= 0){grupo[c1].morto = true; causa = "id:"+c1+" Morreu de fome"}
+         if(grupo[c1].idade >= grupo[c1].idademax){grupo[c1].morto = true;causa = "id:"+c1+" Morreu de velhice"}
         Populacao=0
         for(c33=0;c33<grupo.length;c33++){
             if(grupo[c33].morto == false){Populacao+=1}        
@@ -249,7 +250,7 @@ function main(){ // funcao principal do jogo
         }
 
         }else{
-            if(grupo[c1].mortotics < 50){
+            if(grupo[c1].mortotics < 80){
                 c.drawImage(dead,grupo[c1].x*zoom,(grupo[c1].y*zoom)+movezoomy,(32*zoom)*grupo[c1].tamanho,(32*zoom)*grupo[c1].tamanho)
                 grupo[c1].mortotics++
             }
@@ -314,6 +315,8 @@ function main(){ // funcao principal do jogo
     c.font = "35px Arial"
     c.fillText("População x"+Populacao,(canvas.width/2)-135,35)
     c.fillText(dias+" Dias",(canvas.width/2)-90,765)
+    c.font = "25px Arial"
+    c.fillText(causa,(canvas.width/2)-135,85)
      c.font = "20px Arial"
     c.fillText("velocidade",10,80)
     c.fillText(velocidadeswitch+"x",120,80)
@@ -344,6 +347,7 @@ canvas.addEventListener("click",function(){
          grupo[grupo.length-1].nome = nomes[ Math.floor(Math.random() * nomes.length)]
          grupo[grupo.length-1].bonito = Math.floor(Math.random() * 1000)
          grupo[grupo.length-1].reproducoolmax =  Math.floor(Math.random() * 10000)+1000
+         grupo[grupo.length-1].idademax =  Math.floor(Math.random() * 100000)+1000
          
 
     }

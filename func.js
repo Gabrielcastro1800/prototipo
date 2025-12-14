@@ -136,7 +136,7 @@ function repro(id){
     
     for(c9=1;c9 <= grupo.length;c9++){
          c10 = c9-1
-        if(grupo[id].x > grupo[c10].x && grupo[id].x < grupo[c10].x+((32)*grupo[c1].tamanho) && grupo[id].y > grupo[c10].y && grupo[id].y < grupo[c10].y+((32)*grupo[c1].tamanho)){
+        if(grupo[id].x > grupo[c10].x && grupo[id].x < grupo[c10].x+((32)*grupo[c10].tamanho) && grupo[id].y > grupo[c10].y && grupo[id].y < grupo[c10].y+((32)*grupo[c10].tamanho && grupo[c10].morto == false)){
             if(grupo[id].reproducool > grupo[id].reproducoolmax){
                 grupo[grupo.length] = Object.create(animal)
 
