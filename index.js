@@ -263,7 +263,7 @@ function main(){ // funcao principal do jogo
 
     for(c1=0;c1 < arv.length ;c1++){
 
-            arv[c1].comida+=3
+            arv[c1].comida+=1
             if(arv[c1].comida > 1000){arv[c1].comida = 1000}
 
 
