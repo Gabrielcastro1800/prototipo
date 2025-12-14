@@ -13,8 +13,8 @@ const animal = { // objeto do animal base
     vx:0, // velocidade no eixo x
     vy:0, // velocidade no eixo y
     objetivocool: 0,
-    energia:9000, // quantidade atual de energia diminui com tempo
-    maxenergia:16000, // maximo de energia ***
+    energia:8000, // quantidade atual de energia diminui com tempo
+    maxenergia:8000, // maximo de energia ***
     visao:100, // alcance da visão do animal ***
     velocidade:1, // velodidade de movimento do animal ***
     tamanho: 1,
@@ -26,10 +26,16 @@ const animal = { // objeto do animal base
     frame:1,
     frameau:0,
     morto:false,
+    mortotics:0,
     objetivox:0,
     objetivoy:0,
     violento: 0,
     bonito: 0,
+    nome:"",
+    idade:0,
+    idademax:0,
+    reproducoolmax:1000,
+    reproducool:0,
     
 
 };      
@@ -42,16 +48,28 @@ let tamamedio = 0
 let au = 0
 let movezoomx = 0
 let movezoomy = 0
+let dias = 0
+let diastic = 0
 
 
 let drawarvore = false
+let Populacao = 0
 
-for(c2=0;c2 < 15 ;c2++){ // temporario! enche um vetor com copias do obj animal 
+for(c2=0;c2 < 15 ;c2++){ 
     grupo[c2] = Object.create(animal)
     grupo[c2].tamanho += (Math.ceil(Math.random()*14))/10
     grupo[c2].cor = Math.floor(Math.random() * 255);
     grupo[c2].falante = Math.floor(Math.random() * 10000);
     grupo[c2].velocidade = (Math.random() * 5)
+    grupo[c2].maxenergiaenergia = Math.floor(Math.random() * 12000);
+    grupo[c2].energia = grupo[c2].maxenergiaenergia;
+    grupo[c2].nome = nomes[ Math.floor(Math.random() * nomes.length)]
+    grupo[c2].bonito = Math.floor(Math.random() * 1000)
+
+
+     grupo[c2].idademax =  Math.floor(Math.random() * 100000)+1000
+     grupo[c2].reproducoolmax =  Math.floor(Math.random() * 10000)+1000
+
      
 }
 let ids = 0 // ids quantidade de objs no vetor grupo[]
@@ -68,149 +86,16 @@ let arv = []
 let velocidade = 30 
 let velocidadeswitch = 1 // relacionado ao botão de troca de velecidade  
 
-let testtree = new Image
-testtree.src = "sprites/natural/arv.png"
-let testtree2 = new Image
-testtree2.src = "sprites/natural/arv2.png"
-let falaimg = new Image
-falaimg.src = "sprites/efeitos/talk.png"
-let fala2img = new Image
-fala2img.src = "sprites/efeitos/talk2.png"
-let sele = new Image
-sele.src = "sprites/bota/sele.png"
 
-
-let sprite1 = new Image // carregando a imagem do animal
-sprite1.src = "sprites/animal/1.png"
-let sprite2 = new Image
-sprite2.src = "sprites/animal/2.png"
-let sprite3 = new Image
-sprite3.src = "sprites/animal/3.png"
-
-
-let sprite4 = new Image
-sprite4.src = "sprites/animal/4.png"
-let sprite5 = new Image
-sprite5.src = "sprites/animal/5.png"
-let sprite6 = new Image
-sprite6.src = "sprites/animal/6.png"
-
-
-
-
-
-let grass = new Image();
-grass.src = "sprites/natural/grass.png"
-
-let titulo = new Image();
-titulo.src = "sprites/efeitos/titulo.png"
 
 
 const arvore = {
     x:0,
     y:0,
-    comida:1000
+    comida:500
 }
 
-let falas = ["Vai corinthians!","é o que sobra?","Nem fudendo","alfa aqui tá?","beta!","jonas mo gay","ala teu pai",
-    "O que preferes?","mano tipo","Tipo bixo mesmo","oq tu acha?","antes de ir comer","Tranquilo","mo pas","n word","twiteiro medio","...",
-    "LADRÂO!","Ai, que delicia","Tu que é","tu que deixa","comeu miojo?","passa pano!","Odeio os verdes","Odeio os roxos",
-    "odeio os rosa","odeio os laranja","Seu bobão molhado",
-  "Seu banana gigante",
-  "Tolo sem noção",
-  "Cabeça de vento",
-  "Paspalho de marca",
-  "Bobalhão sem rumo",
-  "Zé ruela cansado",
-  "Palhaço de aluguel",
-  "Banana ambulante",
-  "Troço sem graça",
-  "Mala sem alça",
-  "Panaca de plantão",
-  "Chato pra caramba",
-  "Nó cego chato",
-  "Besta quadrada",
-  "Tranqueira sem futuro",
-  "Orelhudo de festa",
-  "Zé ninguém molhado",
-  "Cabeça de bagre",
-  "Mané de novela",
-  "Baranga de luxo",
-  "Lesado de carteirinha",
-  "Desenxabido sem classe",
-  "Pateta de esquina",
-  "Trombadinha de espuma",
-  "Bobalhão de sempre",
-  "Fiasco ambulante",
-  "Nababão sem limites",
-  "Aberração de bolso",
-  "Enjoado de fábrica",
-   "Gênio das galáxias",
-  "Lenda do caos",
-  "Brabo sem limites",
-  "Mito dos cafés",
-  "Fera dos cliques",
-  "Astro das tretas",
-  "Craque do improviso",
-  "Prodígio das piadas",
-  "Monstro do código",
-  "Sábio das ruas",
-  "Rei das gambis",
-  "Lord dos memes",
-  "Patrão da zoeira",
-  "Chefe das lendas",
-  "Majestade dos bugs",
-   "Titã das galáxias",
-  "Deus das planilhas",
-  "Messias dos memes",
-  "Imperador do caos",
-  "Dragão do carisma",
-  "Sabidão supremo intergaláctico",
-  "Monarca das tretas",
-  "Oráculo das piadas",
-  "Faraó do estilo",
-  "Colosso do talento",
-  "Demônio do charme",
-  "Gigante da sabedoria",
-  "Divindade do hype",
-  "Apocalipse do swag",
-  "Rei do impossível",
-    "Oi, bonitinho",
-  "E aí, encanto",
-  "Você brilha",
-  "Oi, charme",
-  "Fala, estrela",
-  "Oi, lindinha",
-  "Cheguei, sumido",
-  "Você encanta",
-  "Oi, beleza",
-  "Sua presença ilumina",
-  "Hey, fofura",
-  "Você é charme",
-  "Oi, crush",
-  "Me notou?",
-  "Gosto de você",
-   "E aí, charme",
-  "Oi, doce",
-  "Você fascina",
-  "Olá, sorriso",
-  "E aí, paixão",
-  "Oi, irresistível",
-  "Você hipnotiza",
-  "Olá, fofinho",
-  "Hey, gracinha",
-  "Que saudade",
-  "Você encanta mesmo",
-  "Oi, perfeição",
-  "Chega mais",
-  "Oi, preciosidade",
-  "Tudo bem, lindo?",
-  "jesus",
-  "grosso",
-  "feito",
-  "bao?",
-  "goku > ronaldo"
-]
+
 
 
 
@@ -233,6 +118,8 @@ function main(){ // funcao principal do jogo
     ids = grupo.length
     
      if(tela == 1){
+
+    
         
      c.drawImage(bgCanvas, 0, 0,canvas.width*zoom,canvas.height*zoom);
 
@@ -240,14 +127,8 @@ function main(){ // funcao principal do jogo
   
      c.fillStyle = "rgba(17, 122, 161, 1)"
      c.font = "50px Asimovian"
-     c.fillText("Começar nova",400,480)
-     c.fillText("Graficos",400,560)
-     if(select == 1){
-        c.drawImage(sele,330,430,64,64)
-     }
-     if(select == 2){
-        c.drawImage(sele,330,510,64,64)
-     }
+     c.fillText("Nova simulação",400,480)
+ 
      c.fillStyle = "rgba(9, 9, 9, 1)"
      c.font = "25px Asimovian"
      c.fillText("Feito por Leonardo, Gabriel e Cristina",200,700)
@@ -256,9 +137,26 @@ function main(){ // funcao principal do jogo
 
 
     if(tela == 2){
+
+         diastic++
+    
+     
+     if(diastic > 3000){
+        dias+=1
+        diastic = 0
+     }
+
+
     c.drawImage(bgCanvas, 0, 0,canvas.width*zoom,canvas.height*zoom);
     for(c1=0;c1 < grupo.length ;c1++){ // chama as funcoes para cada animal
-        
+        if(grupo[c1].energia <= 0){grupo[c1].morto = true}
+         if(grupo[c1].idade >= grupo[c1].idademax){grupo[c1].morto = true}
+        Populacao=0
+        for(c33=0;c33<grupo.length;c33++){
+            if(grupo[c33].morto == false){Populacao+=1}        
+        }
+
+
         if(grupo[c1].morto == false){
         
         if(grupo[c1].objetivocool < 0 && grupo[c1].energia > grupo[c1].maxenergia/2){objetivo(c1)}
@@ -266,6 +164,9 @@ function main(){ // funcao principal do jogo
         grupo[c1].objetivocool--
 
         wander(c1)
+        grupo[c1].reproducool+=1
+        grupo[c1].idade+=1
+        repro(c1)
    
 
         grupo[c1].energia-=1
@@ -319,16 +220,7 @@ function main(){ // funcao principal do jogo
             c.drawImage(sprite4,grupo[c1].x*zoom,(grupo[c1].y*zoom)+movezoomy,(32*zoom)*grupo[c1].tamanho,(32*zoom)*grupo[c1].tamanho)
         }
         c.filter = "none";
-        if(grupo[c1].f == true){
-    
-            c.drawImage(falaimg,(grupo[c1].x*zoom)+60,((grupo[c1].y*zoom)+movezoomy)-50,128,64)
-            c.fillStyle = "rgba(9, 9, 9, 1)"
-            c.font = "14px Asimovian"
-            c.fillText(grupo[c1].pensando,(grupo[c1].x*zoom)+71,((grupo[c1].y*zoom)+movezoomy-15))
-
-
-            
-        }
+       
         grupo[c1].falando+=1
         grupo[c1].frameau+=1
         if(grupo[c1].frameau > 4){grupo[c1].frame+=1; grupo[c1].frameau = 0 }
@@ -356,27 +248,21 @@ function main(){ // funcao principal do jogo
             c.fillText(grupo[c1].energia,grupo[c1].x*zoom,grupo[c1].y*zoom)
         }
 
+        }else{
+            if(grupo[c1].mortotics < 50){
+                c.drawImage(dead,grupo[c1].x*zoom,(grupo[c1].y*zoom)+movezoomy,(32*zoom)*grupo[c1].tamanho,(32*zoom)*grupo[c1].tamanho)
+                grupo[c1].mortotics++
+            }
+            
         }
     
     }
-    c.fillStyle = "red"
-    c.fillRect(10,10,70,40)
-    c.fillRect(10,60,100,30)
-    c.fillRect(10,100,120,30)
-    c.fillStyle = "Black"
-    
-    c.font = "10px Arial"
-    c.fillText("adicionar teste",10,35)
-    c.font = "20px Arial"
-    c.fillText("População teste x"+(grupo.length),90,35)
-    c.fillText("velocidade",10,80)
-    c.fillText(velocidadeswitch+"x",120,80)
-    c.fillText("posição teste",10,120)
+
 
 
     for(c1=0;c1 < arv.length ;c1++){
 
-            arv[c1].comida+=1
+            arv[c1].comida+=3
             if(arv[c1].comida > 1000){arv[c1].comida = 1000}
 
 
@@ -387,6 +273,20 @@ function main(){ // funcao principal do jogo
             }
             
 
+    }
+
+
+    for(c1=0;c1 < grupo.length ;c1++){
+         if(grupo[c1].f == true && grupo[c1].morto == false){
+    
+            c.drawImage(falaimg,(grupo[c1].x*zoom)+60,((grupo[c1].y*zoom)+movezoomy)-50,128,64)
+            c.fillStyle = "rgba(9, 9, 9, 1)"
+            c.font = "14px Asimovian"
+            c.fillText(grupo[c1].pensando,(grupo[c1].x*zoom)+71,((grupo[c1].y*zoom)+movezoomy-15))
+
+
+            
+        }
     }
 
 
@@ -403,7 +303,21 @@ function main(){ // funcao principal do jogo
     c.drawImage(testtree,10,160,64,64)
 
 
-
+    c.fillStyle = "red"
+    c.fillRect(10,10,70,40)
+    c.fillRect(10,60,100,30)
+    c.fillRect(10,100,120,30)
+    c.fillStyle = "Black"
+    
+    c.font = "10px Arial"
+    c.fillText("adicionar teste",10,35)
+    c.font = "35px Arial"
+    c.fillText("População x"+Populacao,(canvas.width/2)-135,35)
+    c.fillText(dias+" Dias",(canvas.width/2)-90,765)
+     c.font = "20px Arial"
+    c.fillText("velocidade",10,80)
+    c.fillText(velocidadeswitch+"x",120,80)
+    c.fillText("posição teste",10,120)
   
 
 }
@@ -412,10 +326,6 @@ function main(){ // funcao principal do jogo
             c.font = "30px Arial"
             c.fillText("Media de cor "+cormedia,30,30)
             c.fillText("Media de tamanho "+tamamedio,30,60)
-
-            c.filter = "hue-rotate("+cormedia+"deg)";
-            c.drawImage(testsprite,100,100,150,150)
-            c.filter = "none";
 
         }
     setTimeout(main,velocidade)// chama e repete a função do main() "principal"
@@ -429,6 +339,11 @@ canvas.addEventListener("click",function(){
          grupo[grupo.length-1].cor = Math.floor(Math.random() * 255);
          grupo[grupo.length-1].falante = Math.floor(Math.random() * 10000) ;
          grupo[grupo.length-1].velocidade = (Math.random() * 5)
+         grupo[grupo.length-1].maxenergiaenergia = Math.floor(Math.random() * 12000);
+         grupo[grupo.length-1].energia = grupo[grupo.length-1].maxenergiaenergia;
+         grupo[grupo.length-1].nome = nomes[ Math.floor(Math.random() * nomes.length)]
+         grupo[grupo.length-1].bonito = Math.floor(Math.random() * 1000)
+         grupo[grupo.length-1].reproducoolmax =  Math.floor(Math.random() * 10000)+1000
          
 
     }

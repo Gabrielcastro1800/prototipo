@@ -45,22 +45,32 @@ function wander(id){
 
 function media(){
      au = 0
+     au2 = 0
     while(au < grupo.length){
 
-        cormedia = cormedia+grupo[au].cor
+        if(grupo[au].morto == false){
+             cormedia = cormedia+grupo[au].cor
+             au2 +=1
+        }
+       
         au+=1
-
     }
-    cormedia = cormedia/grupo.length
+    cormedia = cormedia/au2
     cormedia = Math.ceil(cormedia)
      au = 0
+     au2 = 0
     while(au < grupo.length){
 
-        tamamedio = tamamedio+grupo[au].tamanho
-        au+=1
+        
+
+        if(grupo[au].morto == false){
+             cormedia = cormedia+grupo[au].cor
+             au2 +=1
+        }
+         au+=1
 
     }
-    tamamedio = tamamedio/grupo.length
+    tamamedio = tamamedio/au2
     tamamedio = Math.ceil(tamamedio)
 
 }
@@ -72,8 +82,8 @@ function test(){
 
 function objetivo(id){
 
-    grupo[id].objetivox = Math.floor(Math.random() * 900)
-    grupo[id].objetivoy = Math.floor(Math.random() * 500)
+    grupo[id].objetivox = Math.floor(Math.random() * 800)+150
+    grupo[id].objetivoy = Math.floor(Math.random() * 500)+150
 
 
 
@@ -119,6 +129,33 @@ function objetivocomida(id){
 
     if(arvcomcomida.length == 0){
         objetivo(id)
+    }
+
+}
+function repro(id){
+    
+    for(c9=1;c9 <= grupo.length;c9++){
+         c10 = c9-1
+        if(grupo[id].x > grupo[c10].x && grupo[id].x < grupo[c10].x+((32)*grupo[c1].tamanho) && grupo[id].y > grupo[c10].y && grupo[id].y < grupo[c10].y+((32)*grupo[c1].tamanho)){
+            if(grupo[id].reproducool > grupo[id].reproducoolmax){
+                grupo[grupo.length] = Object.create(animal)
+
+                grupo[grupo.length-1].tamanho = ((grupo[id].tamanho+grupo[c10].tamanho)/2)
+            grupo[grupo.length-1].cor = ((grupo[id].cor+grupo[c10].cor)/2)+(Math.floor(Math.random() * 50)-25)          
+            grupo[grupo.length-1].falante = (grupo[id].falante+grupo[c10].falante)+Math.floor(Math.random() * 3000)            
+            grupo[grupo.length-1].velocidade = ((grupo[id].velocidade+grupo[c10].velocidade)/2)
+             grupo[grupo.length-1].maxenergiaenergia = ((grupo[id].maxenergiaenergia+grupo[c10].maxenergiaenergia)/2)+Math.floor(Math.random() * 1200);
+             grupo[grupo.length-1].energia = (grupo[grupo.length-1].maxenergiaenergia)/2;
+            grupo[grupo.length-1].nome = nomes[ Math.floor(Math.random() * nomes.length)]
+            grupo[grupo.length-1].bonito = ((grupo[id].bonito+grupo[c10].bonito)/2)+(Math.floor(Math.random() * 10)-10)
+            grupo[grupo.length-1].reproducoolmax = ((grupo[id].reproducoolmax+grupo[c10].reproducoolmax)/2)
+              grupo[grupo.length-1].idademax = ((grupo[id].idademax+grupo[c10].idademax)/2)
+
+            grupo[grupo.length-1].x = grupo[id].x
+            grupo[grupo.length-1].y = grupo[id].y
+                grupo[id].reproducool=0
+            }
+        }
     }
 
 }
