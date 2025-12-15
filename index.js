@@ -15,7 +15,6 @@ const animal = { // objeto do animal base
     objetivocool: 0,
     energia:8000, // quantidade atual de energia diminui com tempo
     maxenergia:8000, // maximo de energia ***
-    visao:100, // alcance da visão do animal ***
     velocidade:1, // velodidade de movimento do animal ***
     tamanho: 1,
     cor: 0,
@@ -36,8 +35,6 @@ const animal = { // objeto do animal base
     idademax:0,
     reproducoolmax:1000,
     reproducool:0,
-    
-
 };      
     //probriendades marcadas com *** são genes ou status que provavelmente serão auterados
     // de pai pra filhos
@@ -107,9 +104,6 @@ function main(){ // funcao principal do jogo
     ids = grupo.length
     
      if(tela == 1){
-
-    
-        
      c.drawImage(bgCanvas, 0, 0,canvas.width*zoom,canvas.height*zoom);
 
      c.drawImage(titulo,200,0,800,400)
@@ -141,7 +135,7 @@ function main(){ // funcao principal do jogo
         if(grupo[c1].energia <= 0){grupo[c1].morto = true; causa = "id:"+c1+" Morreu de fome"}
          if(grupo[c1].idade >= grupo[c1].idademax){grupo[c1].morto = true;causa = "id:"+c1+" Morreu de velhice"}
         Populacao=0
-        for(c33=0;c33<grupo.length;c33++){
+        for(c33=0;c33<grupo.length;c33++) {
             if(grupo[c33].morto == false){Populacao+=1}        
         }
 
@@ -159,32 +153,24 @@ function main(){ // funcao principal do jogo
    
 
         grupo[c1].energia-=1
-
-           // if(grupo[c1].energia < (grupo[c1].maxenergia/2)){
-           //     grupo[c1].wandering = 0
-           //     comer(c1)
-           // }
         
 
 
 
         c.filter = "hue-rotate("+grupo[c1].cor+"deg)";
-        if(grupo[c1].vx < 0){
+        if(grupo[c1].vx < 0) {
 
-            switch(grupo[c1].frame){
-
+            switch(grupo[c1].frame) {
                 case 1:
                  c.drawImage(sprite1,grupo[c1].x*zoom,(grupo[c1].y*zoom)+movezoomy,(32*zoom)*grupo[c1].tamanho,(32*zoom)*grupo[c1].tamanho)
                     break;
                  case 2:
                  c.drawImage(sprite2,grupo[c1].x*zoom,(grupo[c1].y*zoom)+movezoomy,(32*zoom)*grupo[c1].tamanho,(32*zoom)*grupo[c1].tamanho)
                     break;
-
                 case 3:
                  c.drawImage(sprite3,grupo[c1].x*zoom,(grupo[c1].y*zoom)+movezoomy,(32*zoom)*grupo[c1].tamanho,(32*zoom)*grupo[c1].tamanho)
                     break;
-            }
-           
+            }  
 
         }
         if(grupo[c1].vx > 0){
@@ -434,17 +420,17 @@ canvas.addEventListener("click",function(){
         }
 
          if( event.offsetX > 950 && event.offsetX < 950+130 && event.offsetY > 100 && event.offsetY < 100+40 && menu == 1 ){
-        grupo[grupo.length] = Object.create(animal)
-        grupo[grupo.length-1].tamanho += (Math.ceil(Math.random()*14))/10
-         grupo[grupo.length-1].cor = Math.floor(Math.random() * 255);
-         grupo[grupo.length-1].falante = Math.floor(Math.random() * 10000) ;
-         grupo[grupo.length-1].velocidade = (Math.random() * 5)
-         grupo[grupo.length-1].maxenergiaenergia = Math.floor(Math.random() * 12000);
-         grupo[grupo.length-1].energia = grupo[grupo.length-1].maxenergiaenergia;
-         grupo[grupo.length-1].nome = nomes[ Math.floor(Math.random() * nomes.length)]
-         grupo[grupo.length-1].bonito = Math.floor(Math.random() * 1000)
-         grupo[grupo.length-1].reproducoolmax =  Math.floor(Math.random() * 10000)+1000
-         grupo[grupo.length-1].idademax =  Math.floor(Math.random() * 100000)+1000
+            grupo[grupo.length] = Object.create(animal)
+            grupo[grupo.length-1].tamanho += (Math.ceil(Math.random()*14))/10
+            grupo[grupo.length-1].cor = Math.floor(Math.random() * 255);
+            grupo[grupo.length-1].falante = Math.floor(Math.random() * 10000) ;
+            grupo[grupo.length-1].velocidade = (Math.random() * 5)
+            grupo[grupo.length-1].maxenergiaenergia = Math.floor(Math.random() * 12000);
+            grupo[grupo.length-1].energia = grupo[grupo.length-1].maxenergiaenergia;
+            grupo[grupo.length-1].nome = nomes[ Math.floor(Math.random() * nomes.length)]
+            grupo[grupo.length-1].bonito = Math.floor(Math.random() * 1000)
+            grupo[grupo.length-1].reproducoolmax =  Math.floor(Math.random() * 10000)+1000
+            grupo[grupo.length-1].idademax =  Math.floor(Math.random() * 100000)+1000
         }
          if( event.offsetX > 10 && event.offsetX < 10+100 && event.offsetY > 60 && event.offsetY < 60+30 ){
         switch(velocidadeswitch){

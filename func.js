@@ -123,39 +123,96 @@ function objetivocomida(id){
 
     }
 
-
-
-
-
     if(arvcomcomida.length == 0){
         objetivo(id)
     }
-
 }
+
 function repro(id){
-    
+    let pontos = 0
+    let chance = Math.random()
     for(c9=1;c9 <= grupo.length;c9++){
          c10 = c9-1
-        if(grupo[id].x > grupo[c10].x && grupo[id].x < grupo[c10].x+((32)*grupo[c10].tamanho) && grupo[id].y > grupo[c10].y && grupo[id].y < grupo[c10].y+((32)*grupo[c10].tamanho && grupo[c10].morto == false)){
-            if(grupo[id].reproducool > grupo[id].reproducoolmax){
-                grupo[grupo.length] = Object.create(animal)
-
-                grupo[grupo.length-1].tamanho = ((grupo[id].tamanho+grupo[c10].tamanho)/2)
-            grupo[grupo.length-1].cor = ((grupo[id].cor+grupo[c10].cor)/2)+(Math.floor(Math.random() * 50)-25)          
-            grupo[grupo.length-1].falante = (grupo[id].falante+grupo[c10].falante)+Math.floor(Math.random() * 3000)            
-            grupo[grupo.length-1].velocidade = ((grupo[id].velocidade+grupo[c10].velocidade)/2)
-             grupo[grupo.length-1].maxenergiaenergia = ((grupo[id].maxenergiaenergia+grupo[c10].maxenergiaenergia)/2)+Math.floor(Math.random() * 1200);
-             grupo[grupo.length-1].energia = (grupo[grupo.length-1].maxenergiaenergia)/2;
-            grupo[grupo.length-1].nome = nomes[ Math.floor(Math.random() * nomes.length)]
-            grupo[grupo.length-1].bonito = ((grupo[id].bonito+grupo[c10].bonito)/2)+(Math.floor(Math.random() * 10)-10)
-            grupo[grupo.length-1].reproducoolmax = ((grupo[id].reproducoolmax+grupo[c10].reproducoolmax)/2)
-              grupo[grupo.length-1].idademax = ((grupo[id].idademax+grupo[c10].idademax)/2)
-
-            grupo[grupo.length-1].x = grupo[id].x
-            grupo[grupo.length-1].y = grupo[id].y
-                grupo[id].reproducool=0
+        if(grupo[id].x > grupo[c10].x && grupo[id].x < grupo[c10].x+(64) && grupo[id].y > grupo[c10].y && grupo[id].y < grupo[c10].y+((64) && grupo[c10].morto == false && !(id == c10))){
+            if(grupo[id].reproducool > grupo[id].reproducoolmax) {
+                pontos+=(1000/grupo[id].cor) + 1
+                pontos+=grupo[id].bonito
+                pontos+= 1000/(grupo[id].falante/100) + 1
+                pontos = pontos/3000
+                if(chance <= pontos) {
+                    gerabebe(id,c10)
+                    grupo[id].reproducool = 0
+                }
             }
         }
     }
 
+}
+
+function gerabebe(id,id2){
+
+     grupo[grupo.length] = Object.create(animal)
+
+        if(grupo[id].tamanho >= grupo[id2].tamanho){
+            grupo[grupo.length-1].tamanho = random((grupo[id2].tamanho),(grupo[id].tamanho))
+ 
+        } else {
+            grupo[grupo.length-1].tamanho = random((grupo[id].tamanho),(grupo[id2].tamanho))
+        }
+         if(grupo[id].cor >= grupo[id2].cor){
+             grupo[grupo.length-1].cor = random((grupo[id2].cor),(grupo[id].cor))
+        }else{
+            grupo[grupo.length-1].cor = random((grupo[id].cor),(grupo[id2].cor))
+        }
+        if(grupo[id].falante >= grupo[id2].falante){
+           grupo[grupo.length-1].falante = random((grupo[id2].falante),(grupo[id].falante))
+        }
+        else{
+            grupo[grupo.length-1].falante = random((grupo[id].falante),(grupo[id2].falante))
+        }
+        if(grupo[id].velocidade >= grupo[id2].velocidade){
+           grupo[grupo.length-1].velocidade = random((grupo[id2].velocidade),(grupo[id].velocidade))
+        }else{
+             grupo[grupo.length-1].velocidade = random((grupo[id].velocidade),(grupo[id2].velocidade))
+
+        }
+        if(grupo[id].maxenergiaenergia >= grupo[id2].maxenergiaenergia){
+            grupo[grupo.length-1].maxenergiaenergia = random((grupo[id2].maxenergiaenergia),(grupo[id].maxenergiaenergia))
+        }
+        else{
+            grupo[grupo.length-1].maxenergiaenergia = random((grupo[id].maxenergiaenergia),(grupo[id2].maxenergiaenergia))
+        }
+        grupo[grupo.length-1].energia = grupo[grupo.length-1].maxenergiaenergia
+        grupo[grupo.length-1].nome = nomes[ Math.floor(Math.random() * nomes.length)]
+        if(grupo[id].bonito >= grupo[id2].bonito){
+             grupo[grupo.length-1].bonito = random((grupo[id2].bonito),(grupo[id].bonito))
+        }
+        else{
+             grupo[grupo.length-1].bonito = random((grupo[id].bonito),(grupo[id2].bonito))
+        }
+        if(grupo[id].reproducoolmax >= grupo[id2].reproducoolmax){
+              grupo[grupo.length-1].reproducoolmax = random((grupo[id2].reproducoolmax),(grupo[id].reproducoolmax))
+        }
+        else{
+            grupo[grupo.length-1].reproducoolmax = random((grupo[id].reproducoolmax),(grupo[id2].reproducoolmax))
+        }
+        if(grupo[id].idademax >= grupo[id2].idademax){
+           grupo[grupo.length-1].idademax = random((grupo[id].idademax),(grupo[id2].idademax))
+        }
+        else{
+            grupo[grupo.length-1].idademax = random((grupo[id2].idademax),(grupo[id].idademax))
+
+        }
+
+        grupo[grupo.length-1].x = grupo[id].x
+        grupo[grupo.length-1].y = grupo[id].y
+        
+
+
+}
+
+function random(min, max) {
+    au = Math.random() * (max - min) + min
+    au.toFixed(2)
+    return au;
 }
