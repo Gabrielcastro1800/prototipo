@@ -50,29 +50,17 @@ let movezoomx = 0
 let movezoomy = 0
 let dias = 0
 let diastic = 0
+let menu = 0
+
 
 
 let drawarvore = false
 let Populacao = 0
 let causa = ""
 
-for(c2=0;c2 < 15 ;c2++){ 
-    grupo[c2] = Object.create(animal)
-    grupo[c2].tamanho += (Math.ceil(Math.random()*14))/10
-    grupo[c2].cor = Math.floor(Math.random() * 255);
-    grupo[c2].falante = Math.floor(Math.random() * 10000);
-    grupo[c2].velocidade = (Math.random() * 5)
-    grupo[c2].maxenergiaenergia = Math.floor(Math.random() * 12000);
-    grupo[c2].energia = grupo[c2].maxenergiaenergia;
-    grupo[c2].nome = nomes[ Math.floor(Math.random() * nomes.length)]
-    grupo[c2].bonito = Math.floor(Math.random() * 1000)
+let quantidadeini = 15
 
 
-     grupo[c2].idademax =  Math.floor(Math.random() * 100000)+1000
-     grupo[c2].reproducoolmax =  Math.floor(Math.random() * 10000)+1000
-
-     
-}
 let ids = 0 // ids quantidade de objs no vetor grupo[]
 let water = [400,300,50,50] // temporario relacionado a localização da comida ou agua
 
@@ -289,54 +277,163 @@ function main(){ // funcao principal do jogo
             
         }
     }
-
-
-    if(drawarvore == false){
+   if(menu == 0){
+        c.drawImage(sele2,1100,350,64,64)
+    }
+    if(menu == 1){
+          c.drawImage(sele,850,350,64,64)
+        c.drawImage(square,930,50,352,688)
+          if(drawarvore == false){
             c.fillStyle = "red"
-            c.fillRect(10,160,80,80)
+            c.fillRect(950,630,80,80)
     }
     if(drawarvore == true){
             c.fillStyle = "gray"
-            c.fillRect(10,160,80,80)
+            c.fillRect(950,630,80,80)
     }
 
+      
+         c.drawImage(testtree,950,630,64,64)
 
-    c.drawImage(testtree,10,160,64,64)
 
 
     c.fillStyle = "red"
-    c.fillRect(10,10,70,40)
+    c.fillRect(950,540,80,80)
+
+    c.drawImage(fabrica,950,540,64,64)
+
+    c.fillRect(1040,540,80,80)
+
+    c.drawImage(fabrica,950,540,64,64)
+    c.drawImage(toca2,1040,540,64,64)
+
+    c.fillStyle = "red"
+    c.fillRect(950,100,130,40)
+    c.fillRect(950,150,130,40)
     c.fillRect(10,60,100,30)
-    c.fillRect(10,100,120,30)
+ 
     c.fillStyle = "Black"
     
-    c.font = "10px Arial"
-    c.fillText("adicionar teste",10,35)
+    c.font = "15px Arial"
+    c.fillText("Adicionar Animal",955,120)
+    c.fillText("Remover",955,170)
+    }
+
+    c.fillStyle = "red"
+c.fillRect(10,60,100,30)
+c.fillRect(10,100,100,30)
+    c.fillStyle = "Black"
     c.font = "35px Arial"
     c.fillText("População x"+Populacao,(canvas.width/2)-135,35)
-    c.fillText(dias+" Dias",(canvas.width/2)-90,765)
+    c.fillText(dias+" Ciclos",(canvas.width/2)-90,765)
     c.font = "25px Arial"
     c.fillText(causa,(canvas.width/2)-135,85)
      c.font = "20px Arial"
     c.fillText("velocidade",10,80)
+     c.fillText("Finalizar",10,120)
     c.fillText(velocidadeswitch+"x",120,80)
-    c.fillText("posição teste",10,120)
-  
+
+
+ 
+
 
 }
         if(tela == 3){
-            c.fillStyle = "black"
-            c.font = "30px Arial"
-            c.fillText("Media de cor "+cormedia,30,30)
-            c.fillText("Media de tamanho "+tamamedio,30,60)
+            c.fillStyle = "rgba(34, 34, 44, 1)"
+              c.fillRect(0,0,canvas.width,canvas.height)
+             c.fillStyle = "rgba(252, 252, 252, 1)"
+                c.font = "25px serif"
+            c.fillText("Velocidade Media",500,90)
+
+            c.fillText("Ciclos:",30,770)
+
+            c.fillText("10",30,700)
+            c.fillText("20",30,600)
+            c.fillText("30",30,500)
+            c.fillText("40",30,400)
+            c.fillText("50",30,300)
+            c.fillText("60",30,200)
+
+            c.fillText("velocidade:",30,150)
+
+
+            c.fillText("1",150,770)
+            c.fillText("2",300,770)
+            c.fillText("3",450,770)
+            c.fillText("4",600,770)
+            c.fillText("5",750,770)
+            c.fillText("6",900,770)
+            c.fillText("7",1050,770)
+
+              c.fillStyle = "rgba(114, 15, 15, 1)"
+              c.fillRect(105,620,100,120)
+              c.fillRect(255,520,100,220)
+              c.fillRect(405,320,100,420)
+              c.fillRect(555,300,100,440)
+              c.fillRect(705,600,100,140)
+              c.fillRect(855,500,100,240)
+              c.fillRect(1005,560,100,180)
+
+
 
         }
+        if(tela == 4){
+
+             c.drawImage(bgCanvas, 0, 0,canvas.width,canvas.height);
+              c.drawImage(square, 200, 50,832,732);
+                 c.fillStyle = "black"
+                c.font = "40px serif"
+                c.fillText("Configurações",500,110)
+
+              c.fillStyle = "rgba(210, 117, 117, 1)"
+              c.fillRect(360,150,240,50)
+              c.fillRect(360,250,240,50)
+              c.fillRect(360,350,240,50)
+
+               c.fillStyle = "black"
+                c.font = "25px serif"
+                c.fillText("Quantidade inicial "+quantidadeini+"x",370,180)
+                c.fillText("Floresta",430,280)
+                c.fillText("Dificuldade",430,380)
+
+                c.drawImage(sele, 620, 160,32,32);
+                c.drawImage(sele, 620, 260,32,32);
+                c.drawImage(sele, 620, 360,32,32);
+                c.drawImage(sele2, 310, 160,32,32);
+                c.drawImage(sele2, 310, 260,32,32);
+                 c.drawImage(sele2, 310, 360,32,32);
+                 c.drawImage(grass, 790, 360,128,128);
+                 c.drawImage(testtree2, 780, 300,128,128);
+                
+           
+        }   
     setTimeout(main,velocidade)// chama e repete a função do main() "principal"
 
 }
 
 canvas.addEventListener("click",function(){
-    if( event.offsetX > 10 && event.offsetX < 10+70 && event.offsetY > 10 && event.offsetY < 10+40 ){
+
+    if(tela == 4){
+        if(event.offsetX > 620 && event.offsetX < 620+32 && event.offsetY > 160 && event.offsetY < 160+32){
+            quantidadeini+=1
+        }
+        if(event.offsetX > 310 && event.offsetX < 310+32 && event.offsetY > 160 && event.offsetY < 160+32){
+            quantidadeini-=1
+        }
+    }
+
+
+
+    if(tela == 2){
+
+        if(menu == 0 && event.offsetX > 1100 && event.offsetX < 1100+64 && event.offsetY > 350 && event.offsetY < 350+64){
+            menu = 1
+        }
+        if(menu == 1 && event.offsetX > 850 && event.offsetX < 850+64 && event.offsetY > 350 && event.offsetY < 350+64){
+            menu = 0
+        }
+
+         if( event.offsetX > 950 && event.offsetX < 950+130 && event.offsetY > 100 && event.offsetY < 100+40 && menu == 1 ){
         grupo[grupo.length] = Object.create(animal)
         grupo[grupo.length-1].tamanho += (Math.ceil(Math.random()*14))/10
          grupo[grupo.length-1].cor = Math.floor(Math.random() * 255);
@@ -348,14 +445,8 @@ canvas.addEventListener("click",function(){
          grupo[grupo.length-1].bonito = Math.floor(Math.random() * 1000)
          grupo[grupo.length-1].reproducoolmax =  Math.floor(Math.random() * 10000)+1000
          grupo[grupo.length-1].idademax =  Math.floor(Math.random() * 100000)+1000
-         
-
-    }
-    if( event.offsetX > 10 && event.offsetX < 10+120 && event.offsetY > 100 && event.offsetY < 100+30 ){
-        pos = !pos
-        //c.fillRect(10,100,120,30)
-    }
-    if( event.offsetX > 10 && event.offsetX < 10+100 && event.offsetY > 60 && event.offsetY < 60+30 ){
+        }
+         if( event.offsetX > 10 && event.offsetX < 10+100 && event.offsetY > 60 && event.offsetY < 60+30 ){
         switch(velocidadeswitch){
             case 1: 
                     velocidade = 10
@@ -374,67 +465,63 @@ canvas.addEventListener("click",function(){
 
                 break
         }
+            }
+            if( event.offsetX > 950 && event.offsetX < 950+80 && event.offsetY > 630 && event.offsetY < 630+80){
+             drawarvore = !drawarvore
+             }
+                if(menu == 1){
+                    if( !(event.offsetX > 930 && event.offsetX < 930+352 && event.offsetY > 50 && event.offsetY < 50+688) && tela == 2 && drawarvore == true){
+                arv[arv.length] = Object.create(arvore)
+                 arv[arv.length-1].x = event.offsetX-32
+                 arv[arv.length-1].y = event.offsetY-32
+                }
+                 if(menu == 0){
+                    if( tela == 2 && drawarvore == true){
+                    arv[arv.length] = Object.create(arvore)
+                    arv[arv.length-1].x = event.offsetX-32
+                    arv[arv.length-1].y = event.offsetY-32
+                }
+                 }
+                }
+             
     }
 
-    if( event.offsetX > 10 && event.offsetX < 10+80 && event.offsetY > 160 && event.offsetY < 160+80 && tela == 2 ){
-        drawarvore = !drawarvore
-    }
+   
+   
+   
 
-    if( !(event.offsetX > 10 && event.offsetX < 10+80 && event.offsetY > 160 && event.offsetY < 160+80) && tela == 2 && drawarvore == true){
-        arv[arv.length] = Object.create(arvore)
-         arv[arv.length-1].x = event.offsetX-32
-         arv[arv.length-1].y = event.offsetY-32
-    }
+    
 
+    
 })
 document.addEventListener("keyup", function(){
-if(event.keyCode === 38 && tela == 2 && !(zoom == 1)){
-    movezoomy-=15
-    if(movezoomy < -800){
-        movezoomy = 0
-    }
-}
-if(event.keyCode === 40 && tela == 2 && !(zoom == 1)){
-    movezoomy+=15
-     if(movezoomy > 0){
-        movezoomy = 0
-    }
-}
 
 
 
-if(event.keyCode === 187  && tela == 2){
-    zoom+=1
-    if(zoom > 5)
-{
-    zoom = 5
-}
-}
-if(event.keyCode === 189  && tela == 2){
-    zoom-=1
-    if(zoom == 0)
-{
-    zoom = 1
-}
-    
-}
-
-
-if(event.keyCode === 40 && tela == 1){
-select +=1
-if(select > 2){
-    select = 1
-}
-}
-if(event.keyCode === 38 && tela == 1){
-select -=1
-if(select < 1){
-    select = 2
-}
-}
-if(event.keyCode === 13 && select == 1 && tela == 1){
+    if(event.keyCode === 13 && tela == 4){
     tela = 2
+        for(c2=0;c2 < quantidadeini ;c2++){ 
+    grupo[c2] = Object.create(animal)
+    grupo[c2].tamanho += (Math.ceil(Math.random()*14))/10
+    grupo[c2].cor = Math.floor(Math.random() * 255);
+    grupo[c2].falante = Math.floor(Math.random() * 10000);
+    grupo[c2].velocidade = (Math.random() * 5)
+    grupo[c2].maxenergiaenergia = Math.floor(Math.random() * 12000);
+    grupo[c2].energia = grupo[c2].maxenergiaenergia;
+    grupo[c2].nome = nomes[ Math.floor(Math.random() * nomes.length)]
+    grupo[c2].bonito = Math.floor(Math.random() * 1000)
+
+
+     grupo[c2].idademax =  Math.floor(Math.random() * 100000)+1000
+     grupo[c2].reproducoolmax =  Math.floor(Math.random() * 10000)+1000
+
+     
 }
+}
+if(event.keyCode === 13 && tela == 1){
+    tela = 4
+}
+
 }
 );
 

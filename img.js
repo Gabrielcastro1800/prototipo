@@ -14,7 +14,7 @@ let dead = new Image
 dead.src = "sprites/animal/skull.png"
 
 
-let sprite1 = new Image // carregando a imagem do animal
+let sprite1 = new Image 
 sprite1.src = "sprites/animal/1.png"
 let sprite2 = new Image
 sprite2.src = "sprites/animal/2.png"
@@ -38,3 +38,16 @@ grass.src = "sprites/natural/grass.png"
 
 let titulo = new Image();
 titulo.src = "sprites/efeitos/titulo.png"
+
+
+let square = new Image();
+square.src = "sprites/bota/square.png"
+
+let sele2 = new Image();
+sele2.src = "sprites/bota/sele2.png"
+
+let fabrica = new Image();
+fabrica.src = "sprites/fabrica/fabrica.png"
+
+let toca2 = new Image();
+toca2.src = "sprites/predador/toca2.png"
