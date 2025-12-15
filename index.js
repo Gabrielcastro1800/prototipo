@@ -471,6 +471,26 @@ canvas.addEventListener("click",function(){
                 }
              
     }
+    if(tela == 1){
+         tela = 2
+        for(c2=0;c2 < quantidadeini ;c2++){ 
+    grupo[c2] = Object.create(animal)
+    grupo[c2].tamanho += (Math.ceil(Math.random()*14))/10
+    grupo[c2].cor = Math.floor(Math.random() * 255);
+    grupo[c2].falante = Math.floor(Math.random() * 10000);
+    grupo[c2].velocidade = (Math.random() * 5)
+    grupo[c2].maxenergiaenergia = Math.floor(Math.random() * 12000);
+    grupo[c2].energia = grupo[c2].maxenergiaenergia;
+    grupo[c2].nome = nomes[ Math.floor(Math.random() * nomes.length)]
+    grupo[c2].bonito = Math.floor(Math.random() * 1000)
+
+
+     grupo[c2].idademax =  Math.floor(Math.random() * 100000)+1000
+     grupo[c2].reproducoolmax =  Math.floor(Math.random() * 10000)+2500
+
+     
+}
+    }
 
    
    
