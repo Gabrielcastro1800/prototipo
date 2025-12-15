@@ -429,7 +429,7 @@ canvas.addEventListener("click",function(){
             grupo[grupo.length-1].energia = grupo[grupo.length-1].maxenergiaenergia;
             grupo[grupo.length-1].nome = nomes[ Math.floor(Math.random() * nomes.length)]
             grupo[grupo.length-1].bonito = Math.floor(Math.random() * 1000)
-            grupo[grupo.length-1].reproducoolmax =  Math.floor(Math.random() * 10000)+1000
+            grupo[grupo.length-1].reproducoolmax =  Math.floor(Math.random() * 10000)+2500
             grupo[grupo.length-1].idademax =  Math.floor(Math.random() * 100000)+1000
         }
          if( event.offsetX > 10 && event.offsetX < 10+100 && event.offsetY > 60 && event.offsetY < 60+30 ){
@@ -499,7 +499,7 @@ document.addEventListener("keyup", function(){
 
 
      grupo[c2].idademax =  Math.floor(Math.random() * 100000)+1000
-     grupo[c2].reproducoolmax =  Math.floor(Math.random() * 10000)+1000
+     grupo[c2].reproducoolmax =  Math.floor(Math.random() * 10000)+2500
 
      
 }

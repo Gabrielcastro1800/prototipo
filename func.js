@@ -118,11 +118,8 @@ function objetivocomida(id){
             grupo[id].energia += 2000
 
         }
-
      }
-
     }
-
     if(arvcomcomida.length == 0){
         objetivo(id)
     }
@@ -138,7 +135,9 @@ function repro(id){
                 pontos+=(1000/grupo[id].cor) + 1
                 pontos+=grupo[id].bonito
                 pontos+= 1000/(grupo[id].falante/100) + 1
+                pontos = pontos-400
                 pontos = pontos/3000
+
                 if(chance <= pontos) {
                     gerabebe(id,c10)
                     grupo[id].reproducool = 0
