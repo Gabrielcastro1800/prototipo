@@ -49,6 +49,8 @@ let dias = 0
 let diastic = 0
 let menu = 0
 
+let bioma = 0
+
 let pausa = false
 
 let drawarvore = false
@@ -98,7 +100,7 @@ function main(){ // funcao principal do jogo
 
     
 
-
+    
 
 
 
@@ -244,7 +246,11 @@ function main(){ // funcao principal do jogo
 
     for(c1=0;c1 < arv.length ;c1++){
 
-            if(pausa == false){arv[c1].comida+=1}
+            if(pausa == false){
+                if(bioma == 0){arv[c1].comida+=1}
+                if(bioma == 1){arv[c1].comida+=0.5}
+
+            }
             if(arv[c1].comida > 1000){arv[c1].comida = 1000}
 
 
@@ -399,7 +405,14 @@ c.fillRect(10,100,100,30)
                c.fillStyle = "black"
                 c.font = "25px serif"
                 c.fillText("Quantidade inicial "+quantidadeini+"x",370,180)
-                c.fillText("Floresta",430,280)
+
+                if(bioma == 0){
+                    c.fillText("Floresta",430,280)
+                }
+                if(bioma == 1){
+                    c.fillText("Deserto",430,280)
+                }
+               
                 c.fillText("Dificuldade",430,380)
                 c.fillText("iniciar",560,730)
 
@@ -421,6 +434,8 @@ c.fillRect(10,100,100,30)
 canvas.addEventListener("click",function(){
 
     if(tela == 4){
+        
+
         if(event.offsetX > 620 && event.offsetX < 620+32 && event.offsetY > 160 && event.offsetY < 160+32){
             quantidadeini+=1
             if(quantidadeini > 80){ quantidadeini = 80}
@@ -429,6 +444,26 @@ canvas.addEventListener("click",function(){
             quantidadeini-=1
             if(quantidadeini < 0){ quantidadeini = 0}
         }
+
+        if(event.offsetX > 620 && event.offsetX < 620+32 && event.offsetY > 260 && event.offsetY < 260+32){
+            bioma+=1
+            if(bioma > 1){
+                bioma = 0
+            }
+        }
+        if(event.offsetX > 310 && event.offsetX < 310+32 && event.offsetY > 260 && event.offsetY < 260+32){
+            bioma-=1
+            if(bioma < 0){
+                bioma = 1
+            }
+        }
+
+        //c.drawImage(sele, 620, 260,32,32);
+        //c.drawImage(sele2, 310, 260,32,32);
+
+
+
+
         if(event.offsetX > 525 && event.offsetX < 525+140 && event.offsetY > 700 && event.offsetY < 700+50){
             tela = 2
             for(c2=0;c2 < quantidadeini ;c2++){ 
@@ -446,6 +481,19 @@ canvas.addEventListener("click",function(){
      grupo[c2].idademax =  Math.floor(Math.random() * 100000)+1000
      grupo[c2].reproducoolmax =  Math.floor(Math.random() * 10000)+2500
 
+
+
+
+     if(bioma == 1){
+        testtree.src = "sprites/natural/arbusto.png"
+        testtree2.src = "sprites/natural/arbusto2.png"
+        grass.src ="sprites/natural/sand.png"
+          const pattern = bgCtx.createPattern(grass, "repeat");
+        bgCtx.fillStyle = pattern;
+
+
+        bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
+    }
      
 }
         }
