@@ -103,6 +103,18 @@ let water = [400,300,50,50] // temporario relacionado a localização da comida 
 
 let arv = []
 
+// Histórico de médias para gráfico
+let historicoVelocidade = []
+let historicoTamanho = []
+let historicoEnergia = []
+let historicoMaxenergia = []
+let historicoCor = []
+let historicoBonito = []
+let historicoReproducoolmax = []
+let historicoIdademax = []
+let historicoFalante = []
+let ultimoDiaGrafico = 0
+let graficoAtual = 0  // 0-8 para cada variável
 
 
 
@@ -131,6 +143,17 @@ let pos = false
 
 
 let filt = 0
+
+function calcularMedia(propriedade){
+    if(grupo.length === 0) return 0
+    let soma = 0
+    for(let i = 0; i < grupo.length; i++){
+        if(grupo[i].morto === false){
+            soma += grupo[i][propriedade]
+        }
+    }
+    return soma / grupo.length
+}
 
 function main(){ // funcao principal do jogo
 
@@ -169,6 +192,19 @@ function main(){ // funcao principal do jogo
             diastic++
             if(diastic > 3000){
             dias+=1
+            // Rastrear médias para o gráfico
+            if(dias !== ultimoDiaGrafico){
+                historicoVelocidade.push(calcularMedia('velocidade'))
+                historicoTamanho.push(calcularMedia('tamanho'))
+                historicoEnergia.push(calcularMedia('energia'))
+                historicoMaxenergia.push(calcularMedia('maxenergia'))
+                historicoCor.push(calcularMedia('cor'))
+                historicoBonito.push(calcularMedia('bonito'))
+                historicoReproducoolmax.push(calcularMedia('reproducoolmax'))
+                historicoIdademax.push(calcularMedia('idademax'))
+                historicoFalante.push(calcularMedia('falante'))
+                ultimoDiaGrafico = dias
+            }
             diastic = 0
             }
        }  
@@ -395,16 +431,13 @@ function main(){ // funcao principal do jogo
                    c.drawImage(venenoimg,grupo[c2].x+10,grupo[c2].y-30,32,32)
                    grupo[c2].envenado = true
             }
-            else{
-                grupo[c2].envenado = false
+        else{
+            grupo[c2].envenado = false
         }
-                
-
-    
     }
 }
 
-    for(c1=0;c1 < arv.length ;c1++){
+for(c1=0;c1 < arv.length ;c1++){    
 
             if(pausa == false){
                 if(bioma == 0){arv[c1].comida+=1}
@@ -522,7 +555,7 @@ c.fillRect(10,100,100,30)
     }else{
     c.fillText("Continuar",10,40)
     }
-     c.fillText("Finalizar",10,120)
+     c.fillText("Grafico",10,120)
     c.fillText(velocidadeswitch+"x",120,80)
 
     try{if(mostrarinfo >= 0){
@@ -538,7 +571,7 @@ c.fillRect(10,100,100,30)
         c.fillText("Fala: "+grupo[mostrarinfo].falante.toFixed(2), grupo[mostrarinfo].x-50, grupo[mostrarinfo].y-80);
         c.fillText("Bonito: "+grupo[mostrarinfo].bonito.toFixed(2), grupo[mostrarinfo].x-50, grupo[mostrarinfo].y-60);
         c.fillText("Energia: "+Math.floor((grupo[mostrarinfo].energia/grupo[mostrarinfo].maxenergia)*100)+"%", grupo[mostrarinfo].x-50, grupo[mostrarinfo].y-40);
-        c.fillText("Reprodução: "+Math.floor(grupo[mostrarinfo].reproducool)+"/"+grupo[mostrarinfo].reproducoolmax, grupo[mostrarinfo].x-50, grupo[mostrarinfo].y-20);
+        c.fillText("Reprodução: "+Math.floor((grupo[mostrarinfo].reproducool/(grupo[mostrarinfo].reproducoolmax||1))*100)+"%", grupo[mostrarinfo].x-50, grupo[mostrarinfo].y-20);
     }}
     catch{}
 
@@ -548,43 +581,86 @@ c.fillRect(10,100,100,30)
 }
         if(tela == 3){
             c.fillStyle = "rgba(34, 34, 44, 1)"
-              c.fillRect(0,0,canvas.width,canvas.height)
-             c.fillStyle = "rgba(252, 252, 252, 1)"
-                c.font = "25px serif"
-            c.fillText("Velocidade Media",500,90)
-
-            c.fillText("Ciclos:",30,770)
-
-            c.fillText("10",30,700)
-            c.fillText("20",30,600)
-            c.fillText("30",30,500)
-            c.fillText("40",30,400)
-            c.fillText("50",30,300)
-            c.fillText("60",30,200)
-
-            c.fillText("velocidade:",30,150)
-
-
-            c.fillText("1",150,770)
-            c.fillText("2",300,770)
-            c.fillText("3",450,770)
-            c.fillText("4",600,770)
-            c.fillText("5",750,770)
-            c.fillText("6",900,770)
-            c.fillText("7",1050,770)
-
-              c.fillStyle = "rgba(114, 15, 15, 1)"
-              c.fillRect(105,620,100,120)
-              c.fillRect(255,520,100,220)
-              c.fillRect(405,320,100,420)
-              c.fillRect(555,300,100,440)
-              c.fillRect(705,600,100,140)
-              c.fillRect(855,500,100,240)
-              c.fillRect(1005,560,100,180)
-
-
-
+            c.fillRect(0,0,canvas.width,canvas.height)
+            
+            // Selecionar qual variável mostrar
+            let variavelGrafico = ["Velocidade", "Tamanho", "Energia", "Max Energia", "Cor", "Bonito", "Reprodução (max)", "Idade (max)", "Falante"]
+            let historicoAtual = graficoAtual === 0 ? historicoVelocidade : 
+                                  graficoAtual === 1 ? historicoTamanho : 
+                                  graficoAtual === 2 ? historicoEnergia :
+                                  graficoAtual === 3 ? historicoMaxenergia :
+                                  graficoAtual === 4 ? historicoCor :
+                                  graficoAtual === 5 ? historicoBonito :
+                                  graficoAtual === 6 ? historicoReproducoolmax :
+                                  graficoAtual === 7 ? historicoIdademax : historicoFalante
+            
+            c.fillStyle = "rgba(252, 252, 252, 1)"
+            c.font = "25px serif"
+            c.fillText(variavelGrafico[graficoAtual] + " - Média do Grupo", 300, 90)
+            
+            // Instruções
+            c.font = "14px serif"
+            c.fillText("Clique para alternar variáveis (" + (graficoAtual + 1) + "/9)", 350, 125)
+            
+            // Eixos
+            c.fillStyle = "rgba(252, 252, 252, 1)"
+            c.fillRect(80, 150, 1050, 2)  // eixo X
+            c.fillRect(80, 150, 2, 520)   // eixo Y
+            
+            c.font = "14px serif"
+            
+            // Labels eixo Y
+            c.fillText("Max", 20, 165)
+            c.fillText("Med", 20, 415)
+            c.fillText("Min", 20, 665)
+            
+            // Labels eixo X
+            c.fillText("Ciclos:", 20, 720)
+            
+            // Desenhar barras dinâmicas
+            if(historicoAtual.length > 0){
+                let maxValor = Math.max(...historicoAtual) * 1.2
+                let larguraBarra = 90
+                let espacoBarra = 120
+                
+                for(let i = 0; i < historicoAtual.length && i < 7; i++){
+                    let altura = (historicoAtual[i] / maxValor) * 520
+                    let x = 100 + (i * espacoBarra)
+                    let y = 670 - altura
+                    
+                    // Cores diferentes por variável
+                    let cores = [
+                        "rgba(255, 100, 100, 1)",   // 0 Velocidade - vermelho
+                        "rgba(100, 150, 255, 1)",   // 1 Tamanho - azul
+                        "rgba(100, 255, 150, 1)",   // 2 Energia - verde
+                        "rgba(255, 200, 100, 1)",   // 3 Max Energia - laranja
+                        "rgba(255, 100, 200, 1)",   // 4 Cor - rosa
+                        "rgba(200, 100, 255, 1)",   // 5 Bonito - roxo
+                        "rgba(100, 255, 255, 1)",   // 6 Reprodução - ciano
+                        "rgba(255, 255, 100, 1)",   // 7 Idade - amarelo
+                        "rgba(150, 200, 100, 1)"    // 8 Falante - lima
+                    ]
+                    
+                    c.fillStyle = cores[graficoAtual]
+                    c.fillRect(x, y, larguraBarra, altura)
+                    
+                    // Label x
+                    c.fillStyle = "rgba(252, 252, 252, 1)"
+                    c.font = "12px serif"
+                    c.fillText((i+1), x + 35, 720)
+                    
+                    // Valor em cima da barra
+                    c.font = "11px serif"
+                    c.fillText(historicoAtual[i].toFixed(1), x + 20, y - 5)
+                }
+            } else {
+                c.fillStyle = "rgba(150, 150, 150, 1)"
+                c.font = "20px serif"
+                c.fillText("Colete dados iniciando a simulação", 300, 400)
+            }
         }
+
+        
         if(tela == 4){
 
              c.drawImage(bgCanvas, 0, 0,canvas.width,canvas.height);
@@ -641,6 +717,11 @@ c.fillRect(10,100,100,30)
 }
 
 canvas.addEventListener("click",function(){
+
+    if(tela == 3){
+        // Clique em qualquer lugar da tela alterna o gráfico
+        graficoAtual = (graficoAtual + 1) % 9
+    }
 
     if(tela == 4){
         if(event.offsetX > 620 && event.offsetX < 620+32 && event.offsetY > 360 && event.offsetY < 360+32){
@@ -703,6 +784,18 @@ canvas.addEventListener("click",function(){
 
         if(event.offsetX > 525 && event.offsetX < 525+140 && event.offsetY > 700 && event.offsetY < 700+50){
             tela = 2
+            // Reset dos históricos para novo gráfico
+            historicoVelocidade = []
+            historicoTamanho = []
+            historicoEnergia = []
+            historicoMaxenergia = []
+            historicoCor = []
+            historicoBonito = []
+            historicoReproducoolmax = []
+            historicoIdademax = []
+            historicoFalante = []
+            ultimoDiaGrafico = 0
+            graficoAtual = 0
             for(c2=0;c2 < quantidadeini ;c2++){ 
     grupo[c2] = Object.create(animal)
     grupo[c2].tamanho += (Math.ceil(Math.random()*14))/10
@@ -738,6 +831,12 @@ canvas.addEventListener("click",function(){
 
 
     if(tela == 2){
+        if(event.offsetX > 10 && event.offsetX < 10+100 && event.offsetY > 100 && event.offsetY < 630+30){
+            tela = 3
+        }
+        //c.fillRect(10,100,100,30)
+
+
          if(!(event.offsetX > 930 && event.offsetX < 930+352 && event.offsetY > 50 && event.offsetY < 50+688) && drawfabrica == true){
         fabricas[fabricas.length] = Object.create(fabrica)
         fabricas[fabricas.length-1].x = event.offsetX-64
@@ -912,6 +1011,18 @@ document.addEventListener("keyup", function(){
 
     if(event.keyCode === 13 && tela == 4){
     tela = 2
+    // Reset dos históricos para novo gráfico
+    historicoVelocidade = []
+    historicoTamanho = []
+    historicoEnergia = []
+    historicoMaxenergia = []
+    historicoCor = []
+    historicoBonito = []
+    historicoReproducoolmax = []
+    historicoIdademax = []
+    historicoFalante = []
+    ultimoDiaGrafico = 0
+    graficoAtual = 0
         for(c2=0;c2 < quantidadeini ;c2++){ 
     grupo[c2] = Object.create(animal)
     grupo[c2].tamanho += (Math.ceil(Math.random()*14))/10
@@ -938,6 +1049,8 @@ if(event.keyCode === 13 && tela == 1){
 );
 document.addEventListener("mousemove", function(){
     if(tela == 2){
+
+
         try{for(c1=0;c1 < grupo.length ;c1++){
             if(event.offsetX > grupo[c1].x && event.offsetX < grupo[c1].x+40 && event.offsetY > grupo[c1].y && event.offsetY < grupo[c1].y+40){
                 mostrarinfo = c1

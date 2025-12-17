@@ -299,6 +299,8 @@ function predadorhunt(id){
             }
         
     }
+    predadores[id].vx = predadores[id].vx.toFixed(2)
+    predadores[id].vy = predadores[id].vy.toFixed(2)
     predadores[id].x += predadores[id].vx
     predadores[id].y += predadores[id].vy
 }
