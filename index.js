@@ -37,6 +37,20 @@ const animal = { // objeto do animal base
     reproducool:0,
 };      
 
+const toca = {
+    x:0,
+    y:0,
+    cooldown:4000
+}
+const predador = {
+    x:0,
+    y:0,
+    maximodetempo:2000,
+    vx:0,
+    vy:0,
+    tic:0
+}
+
 
     const fabrica = {
     x:0,
@@ -57,11 +71,13 @@ let dias = 0
 let diastic = 0
 let menu = 0
 let drawfabrica = false
-
+let mostrarinfo = -1
 let bioma = 0
+let drawtoca = false
 
 let pausa = false
-
+let tocas = []
+let predadores = []
 let drawarvore = false
 let Populacao = 0
 let causa = ""
@@ -149,8 +165,8 @@ function main(){ // funcao principal do jogo
 
     c.drawImage(bgCanvas, 0, 0,canvas.width*zoom,canvas.height*zoom);
     for(c1=0;c1 < grupo.length ;c1++){ 
-        if(pausa == false){ if(grupo[c1].energia <= 0){grupo[c1].morto = true; causa = "id:"+c1+" Morreu de fome"}
-         if(grupo[c1].idade >= grupo[c1].idademax){grupo[c1].morto = true;causa = "id:"+c1+" Morreu de velhice"}}
+        if(pausa == false){ if(grupo[c1].energia <= 0){grupo[c1].morto = true; causa = grupo[c1].nome+" Morreu de fome"}
+         if(grupo[c1].idade >= grupo[c1].idademax){grupo[c1].morto = true;causa = grupo[c1].nome+" Morreu de velhice"}}
             
          
 
@@ -222,7 +238,7 @@ function main(){ // funcao principal do jogo
         if(grupo[c1].frameau > 4){grupo[c1].frame+=1; grupo[c1].frameau = 0 }
         if(grupo[c1].frame > 3){grupo[c1].frame = 1}
 
-        if(grupo[c1].falando > grupo[c1].falante && grupo[c1].f == false){
+        if(grupo[c1].falando > grupo[c1].falante){
             grupo[c1].falando = 0
             grupo[c1].f = !grupo[c1].f
             grupo[c1].pensando = falas[Math.ceil(Math.random()*falas.length-1)]
@@ -249,6 +265,58 @@ function main(){ // funcao principal do jogo
             
         }
       
+    }
+    
+    for(c1=0;c1 < tocas.length ;c1++){
+
+        if(tocas[c1].cooldown >= 0 && tocas[c1].cooldown <= 3300){
+        c.drawImage(toca2,tocas[c1].x,tocas[c1].y,64,64)
+    }
+    if(tocas[c1].cooldown > 3300 && tocas[c1].cooldown <= 4000){
+        c.drawImage(toca1,tocas[c1].x,tocas[c1].y,64,64)
+    }
+    if(pausa == false){
+         tocas[c1].cooldown-=1
+         if(tocas[c1].cooldown <= 0){
+
+            tocas[c1].cooldown = 4000
+            predadores[predadores.length] = Object.create(predador)
+            predadores[predadores.length-1].x = tocas[c1].x
+            predadores[predadores.length-1].y = tocas[c1].y
+         }
+
+    }
+    }
+    c.filter = "none";
+    for(c1=0;c1 < predadores.length ;c1++){
+        if(predadores[c1].vx > 0){
+            if(predadores[c1].tic == 0){
+                c.drawImage(predador1,predadores[c1].x*zoom,predadores[c1].y*zoom,64,64)
+            }
+            if(predadores[c1].tic == 1){
+                c.drawImage(predador2,predadores[c1].x*zoom,predadores[c1].y*zoom,64,64)
+            }
+        }
+        if(predadores[c1].vx < 0){
+            if(predadores[c1].tic == 0){
+                c.drawImage(predador3,predadores[c1].x*zoom,predadores[c1].y*zoom,64,64)
+            }
+            if(predadores[c1].tic == 1){
+                c.drawImage(predador4,predadores[c1].x*zoom,predadores[c1].y*zoom,64,64)
+            }
+            
+        }
+        if(pausa == false){
+            predadores[c1].tic+=1
+            if(predadores[c1].tic > 1){
+                predadores[c1].tic = 0
+            }
+            predadores[c1].maximodetempo-=1
+            if(predadores[c1].maximodetempo <= 0){
+                predadores.splice(c1,1)
+            }
+            if(predadores.length > 0){predadorwander(c1)}
+        }
     }
      for(c1=0;c1 < fabricas.length ;c1++){
 
@@ -313,7 +381,7 @@ function main(){ // funcao principal do jogo
     
             c.drawImage(falaimg,(grupo[c1].x*zoom)+60,((grupo[c1].y*zoom)+movezoomy)-50,128,64)
             c.fillStyle = "rgba(9, 9, 9, 1)"
-            c.font = "14px Asimovian"
+            c.font = "10px Asimovian"
             c.fillText(grupo[c1].pensando,(grupo[c1].x*zoom)+71,((grupo[c1].y*zoom)+movezoomy-15))
 
 
@@ -353,9 +421,15 @@ function main(){ // funcao principal do jogo
     
     c.drawImage(fab,950,540,64,64)
 
-    c.fillRect(1040,540,80,80)
+    
 
-
+    if(drawtoca == false){
+        c.fillStyle = "red"
+        c.fillRect(1040,540,80,80)
+    }else{
+        c.fillStyle = "gray"
+        c.fillRect(1040,540,80,80)
+    }
     c.drawImage(toca2,1040,540,64,64)
 
     c.fillStyle = "red"
@@ -394,10 +468,29 @@ c.fillRect(10,100,100,30)
     c.fillText(causa,(canvas.width/2)-135,85)
      c.font = "20px Arial"
     c.fillText("velocidade",10,80)
+    if(pausa == false){
     c.fillText("Pausar",10,40)
+    }else{
+    c.fillText("Continuar",10,40)
+    }
      c.fillText("Finalizar",10,120)
     c.fillText(velocidadeswitch+"x",120,80)
 
+    if(mostrarinfo >= 0){
+        c.drawImage(square, grupo[mostrarinfo].x-60, grupo[mostrarinfo].y-200,150,200);
+
+        c.fillStyle = "black"
+        c.font = "12px Arial"
+        c.fillText("Nome: "+grupo[mostrarinfo].nome, grupo[mostrarinfo].x-50, grupo[mostrarinfo].y-180);
+        c.fillText("Idade: "+Math.floor((grupo[mostrarinfo].idade/grupo[mostrarinfo].idademax)*100)+"%", grupo[mostrarinfo].x-50, grupo[mostrarinfo].y-160);
+        c.fillText("Tamanho: "+grupo[mostrarinfo].tamanho.toFixed(2), grupo[mostrarinfo].x-50, grupo[mostrarinfo].y-140);
+        c.fillText("Cor: "+grupo[mostrarinfo].cor.toFixed(2), grupo[mostrarinfo].x-50, grupo[mostrarinfo].y-120);
+        c.fillText("Velocidade: "+grupo[mostrarinfo].velocidade.toFixed(2), grupo[mostrarinfo].x-50, grupo[mostrarinfo].y-100);
+        c.fillText("Fala: "+grupo[mostrarinfo].falante.toFixed(2), grupo[mostrarinfo].x-50, grupo[mostrarinfo].y-80);
+        c.fillText("Bonito: "+grupo[mostrarinfo].bonito.toFixed(2), grupo[mostrarinfo].x-50, grupo[mostrarinfo].y-60);
+        c.fillText("Energia: "+Math.floor((grupo[mostrarinfo].energia/grupo[mostrarinfo].maxenergia)*100)+"%", grupo[mostrarinfo].x-50, grupo[mostrarinfo].y-40);
+        c.fillText("Reprodução: "+Math.floor(grupo[mostrarinfo].reproducool)+"/"+grupo[mostrarinfo].reproducoolmax, grupo[mostrarinfo].x-50, grupo[mostrarinfo].y-20);
+    }
 
  
 
@@ -544,7 +637,7 @@ canvas.addEventListener("click",function(){
     grupo[c2] = Object.create(animal)
     grupo[c2].tamanho += (Math.ceil(Math.random()*14))/10
     grupo[c2].cor = Math.floor(Math.random() * 255);
-    grupo[c2].falante = Math.floor(Math.random() * 10000);
+    grupo[c2].falante = Math.floor(Math.random() * 4000);
     grupo[c2].velocidade = (Math.random() * 5)
     grupo[c2].maxenergiaenergia = Math.floor(Math.random() * 12000);
     grupo[c2].energia = grupo[c2].maxenergiaenergia;
@@ -573,18 +666,31 @@ canvas.addEventListener("click",function(){
         }
     }
 
-    if(!(event.offsetX > 930 && event.offsetX < 930+352 && event.offsetY > 50 && event.offsetY < 50+688) && drawfabrica == true){
+
+    if(tela == 2){
+         if(!(event.offsetX > 930 && event.offsetX < 930+352 && event.offsetY > 50 && event.offsetY < 50+688) && drawfabrica == true){
         fabricas[fabricas.length] = Object.create(fabrica)
         fabricas[fabricas.length-1].x = event.offsetX-64
         fabricas[fabricas.length-1].y = event.offsetY-64
     }
+        if(event.offsetX > 1040 && event.offsetX < 1040+80 && event.offsetY > 540 && event.offsetY < 540+80 && menu == 1){
+            drawtoca = !drawtoca
+            remov = false
+            drawarvore = false
+            drawfabrica = false
+        }
+        if(!(event.offsetX > 930 && event.offsetX < 930+352 && event.offsetY > 50 && event.offsetY < 50+688) && drawtoca == true){
+        tocas[tocas.length] = Object.create(toca)
+        tocas[tocas.length-1].x = event.offsetX-32
+        tocas[tocas.length-1].y = event.offsetY-32
 
-    if(tela == 2){
+    }
         if(event.offsetX > 950 && event.offsetX < 950+80 && event.offsetY > 540 && event.offsetY < 540+80 && menu == 1){
             
             drawfabrica = !drawfabrica
             remov = false
             drawarvore = false
+            drawtoca = false
         }
            
         if(event.offsetX > 950 && event.offsetX < 950+130 && event.offsetY > 200 && event.offsetY < 200+40 && menu == 1){
@@ -623,6 +729,7 @@ canvas.addEventListener("click",function(){
             remov = !remov
             drawarvore = false
             drawfabrica = false
+            drawtoca = false
         }
 
         if(remov == true){
@@ -733,6 +840,19 @@ if(event.keyCode === 13 && tela == 1){
 
 }
 );
+document.addEventListener("mousemove", function(){
+    if(tela == 2){
+        for(c1=0;c1 < grupo.length ;c1++){
+            if(event.offsetX > grupo[c1].x && event.offsetX < grupo[c1].x+40 && event.offsetY > grupo[c1].y && event.offsetY < grupo[c1].y+40){
+                mostrarinfo = c1
+            }else{
+                if(mostrarinfo == c1){
+                    mostrarinfo = -1
+                }
+            }
+        }
+    }
+})
 
 
 

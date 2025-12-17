@@ -29,6 +29,15 @@ sprite5.src = "sprites/animal/5.png"
 let sprite6 = new Image
 sprite6.src = "sprites/animal/6.png"
 
+let predador1 = new Image();
+predador1.src = "sprites/predador/1.png"
+let predador2 = new Image();
+predador2.src = "sprites/predador/2.png"
+let predador3 = new Image();
+predador3.src = "sprites/predador/3.png"
+let predador4 = new Image();
+predador4.src = "sprites/predador/4.png"
+
 
 
 
@@ -50,7 +59,8 @@ sele2.src = "sprites/bota/sele2.png"
 
 let toca2 = new Image();
 toca2.src = "sprites/predador/toca2.png"
-
+let toca1 = new Image();
+toca1.src = "sprites/predador/toca.png"
 
 let fab = new Image();
 fab.src = "sprites/fabrica/fabrica.png"
@@ -59,3 +69,12 @@ let fab2 = new Image();
 fab2.src = "sprites/fabrica/fabrica2.png"
 let fab3 = new Image();
 fab3.src = "sprites/fabrica/fabrica3.png"
+
+let predadorimg = new Image();
+predadorimg.src = "sprites/predador/1.png"
+let predadorimg2 = new Image();
+predadorimg2.src = "sprites/predador/2.png"
+let predadorimg3 = new Image();
+predadorimg3.src = "sprites/predador/3.png"
+let predadorimg4 = new Image();
+predadorimg4.src = "sprites/predador/4.png"
