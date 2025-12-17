@@ -20,7 +20,9 @@ const nomes= [
   "Lorenzo", "Isabel", "Theo", "Ana Clara",
   "Samuel", "Manuela", "Vicente", "Yara",
   "Cauã", "Eloá", "Enrico", "Luna",
-  "Lucca", "Catarina", "Rafael", "Estela"
+  "Lucca", "Catarina", "Rafael", "Estela","Betito","Critina","Snopdog","Thiago","Eduardo",
+  "Bruna","Marcos","Samantha","Julio","Cintia","Fernando","Larissa","Gustavo","Amanda",
+  "Roberta","Vinicius","Patricia","Diego","Camila","Alexandre","Isabela","Rafael","Bianca","Carlos"
 ];
 
 let falas = [
