@@ -131,13 +131,14 @@ function repro(id){
     for(c9=1;c9 <= grupo.length;c9++){
          c10 = c9-1
         if(grupo[id].x > grupo[c10].x && grupo[id].x < grupo[c10].x+(64) && grupo[id].y > grupo[c10].y && grupo[id].y < grupo[c10].y+((64) && grupo[c10].morto == false && !(id == c10))){
-            if(grupo[id].reproducool > grupo[id].reproducoolmax) {
+            if(grupo[id].reproducool >= grupo[id].reproducoolmax) {
                 pontos+=(1000/grupo[id].cor) + 1
                 pontos+=grupo[id].bonito
                 pontos+= 1000/(grupo[id].falante/100) + 1
                 pontos = pontos-400
                 pontos = pontos/3000
-
+                
+                
                 if(chance <= pontos) {
                     gerabebe(id,c10)
                     grupo[id].reproducool = 0
