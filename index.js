@@ -42,6 +42,7 @@ const animal = { // objeto do animal base
 const toca = {
     x:0,
     y:0,
+    cooldown:4000,
     cooldown:4000
 }
 const predador = {
@@ -54,6 +55,10 @@ const predador = {
     startx:0,
     starty:0
 }
+
+
+    let Dificuldade = 1
+
 
 
     const fabrica = {
@@ -288,22 +293,23 @@ function main(){ // funcao principal do jogo
     
     for(c1=0;c1 < tocas.length ;c1++){
 
-        if(tocas[c1].cooldown >= 0 && tocas[c1].cooldown <= 3300){
+        if(tocas[c1].cooldown >= 0 && tocas[c1].cooldown <= tocas[c1].cooldownmax/2){
         c.drawImage(toca2,tocas[c1].x,tocas[c1].y,64,64)
     }
-    if(tocas[c1].cooldown > 3300 && tocas[c1].cooldown <= 4000){
+    if(tocas[c1].cooldown > tocas[c1].cooldownmax/2 && tocas[c1].cooldown <= tocas[c1].cooldownmax){
         c.drawImage(toca1,tocas[c1].x,tocas[c1].y,64,64)
     }
     if(pausa == false){
          tocas[c1].cooldown-=1
          if(tocas[c1].cooldown <= 0){
 
-            tocas[c1].cooldown = 4000
+            tocas[c1].cooldown = 4000*(1/Dificuldade)
             predadores[predadores.length] = Object.create(predador)
             predadores[predadores.length-1].x = tocas[c1].x
             predadores[predadores.length-1].y = tocas[c1].y
             predadores[predadores.length-1].startx = tocas[c1].x
             predadores[predadores.length-1].starty = tocas[c1].y
+            predadores[predadores.length-1].maximodetempo = 2000*Dificuldade
          }
 
     }
@@ -363,7 +369,7 @@ function main(){ // funcao principal do jogo
 
             for(c2=0;c2 < arv.length ;c2++){
          
-                if(pontoColidecomCirculo(arv[c2].x,arv[c2].y,fabricas[c1].x,fabricas[c1].y,500)){
+                if(pontoColidecomCirculo(arv[c2].x,arv[c2].y,fabricas[c1].x,fabricas[c1].y,300)){
                    if(pausa == false){ arv[c2].comida -= 0.25
                     c.drawImage(venenoimg,arv[c2].x+10,arv[c2].y-30,32,32)
                     }
@@ -371,7 +377,7 @@ function main(){ // funcao principal do jogo
             }
         }
             for(c2=0;c2 < grupo.length ;c2++){
-                if(pontoColidecomCirculo(grupo[c2].x,grupo[c2].y,fabricas[c1].x,fabricas[c1].y,400)){
+                if(pontoColidecomCirculo(grupo[c2].x,grupo[c2].y,fabricas[c1].x,fabricas[c1].y,400*Dificuldade)){
                    if(pausa == false){ grupo[c2].energia -= 10}
                    c.drawImage(venenoimg,grupo[c2].x+10,grupo[c2].y-30,32,32)
                    grupo[c2].envenado = true
@@ -590,7 +596,19 @@ c.fillRect(10,100,100,30)
                     c.fillText("Deserto",430,280)
                 }
                
-                c.fillText("Dificuldade",430,380)
+
+                if(Dificuldade == 0.5){
+                    c.fillText(" Fácil",430,380)
+                }
+                if(Dificuldade == 1){
+                    c.fillText(" Medio",430,380)
+                }
+                if(Dificuldade == 2){
+                    c.fillText(" Difícil",430,380)
+                }
+            
+
+
                 c.fillText("iniciar",560,730)
 
                 c.drawImage(sele, 620, 160,32,32);
@@ -611,8 +629,16 @@ c.fillRect(10,100,100,30)
 canvas.addEventListener("click",function(){
 
     if(tela == 4){
-        
-
+        if(event.offsetX > 620 && event.offsetX < 620+32 && event.offsetY > 360 && event.offsetY < 360+32){
+            if(Dificuldade == 0.5){ Dificuldade = 1}
+            else if(Dificuldade == 1){ Dificuldade = 2}
+            else if(Dificuldade == 2){ Dificuldade = 0.5}
+        }
+        if(event.offsetX > 310 && event.offsetX < 310+32 && event.offsetY > 360 && event.offsetY < 360+32){
+            if(Dificuldade == 0.5){ Dificuldade = 2}
+            else if(Dificuldade == 1){ Dificuldade = 0.5}
+            else if(Dificuldade == 2){ Dificuldade = 1}
+        }
         if(event.offsetX > 620 && event.offsetX < 620+32 && event.offsetY > 160 && event.offsetY < 160+32){
             quantidadeini+=1
             if(quantidadeini > 80){ quantidadeini = 80}
@@ -713,6 +739,8 @@ canvas.addEventListener("click",function(){
         tocas[tocas.length] = Object.create(toca)
         tocas[tocas.length-1].x = event.offsetX-32
         tocas[tocas.length-1].y = event.offsetY-32
+        tocas[tocas.length-1].cooldown = 4000*(1/Dificuldade)
+        tocas[tocas.length-1].cooldownmax = 4000*(1/Dificuldade)
 
     }
         if(event.offsetX > 950 && event.offsetX < 950+80 && event.offsetY > 540 && event.offsetY < 540+80 && menu == 1){
@@ -726,6 +754,9 @@ canvas.addEventListener("click",function(){
         if(event.offsetX > 950 && event.offsetX < 950+130 && event.offsetY > 200 && event.offsetY < 200+40 && menu == 1){
                     grupo = [];
                     arv = [];
+                    fabricas = [];
+                    tocas = [];
+                    predadores = [];
                      Populacao = grupo.length      
         }
                  
@@ -893,15 +924,17 @@ if(event.keyCode === 13 && tela == 1){
 );
 document.addEventListener("mousemove", function(){
     if(tela == 2){
-        for(c1=0;c1 < grupo.length ;c1++){
+        try{for(c1=0;c1 < grupo.length ;c1++){
             if(event.offsetX > grupo[c1].x && event.offsetX < grupo[c1].x+40 && event.offsetY > grupo[c1].y && event.offsetY < grupo[c1].y+40){
                 mostrarinfo = c1
+
             }else{
                 if(mostrarinfo == c1){
                     mostrarinfo = -1
                 }
             }
-        }
+        }}
+        catch{}
     }
 })
 
