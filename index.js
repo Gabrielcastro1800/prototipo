@@ -43,12 +43,13 @@ const toca = {
     x:0,
     y:0,
     cooldown:4000,
-    cooldown:4000
+    cooldown:4000,
+    dentro: true
 }
 const predador = {
     x:0,
     y:0,
-    maximodetempo:2000,
+    maximodetempo:5000,
     vx:0,
     vy:0,
     tic:0,
@@ -192,7 +193,7 @@ function main(){ // funcao principal do jogo
             diastic++
             if(diastic > 3000){
             dias+=1
-            // Rastrear médias para o gráfico
+      
             if(dias !== ultimoDiaGrafico){
                 historicoVelocidade.push(calcularMedia('velocidade'))
                 historicoTamanho.push(calcularMedia('tamanho'))
@@ -340,48 +341,55 @@ function main(){ // funcao principal do jogo
       
     }
     
-    for(c1=0;c1 < tocas.length ;c1++){
 
-        if(tocas[c1].cooldown >= 0 && tocas[c1].cooldown <= tocas[c1].cooldownmax/2){
-        c.drawImage(toca2,tocas[c1].x,tocas[c1].y,64,64)
-    }
-    if(tocas[c1].cooldown > tocas[c1].cooldownmax/2 && tocas[c1].cooldown <= tocas[c1].cooldownmax){
-        c.drawImage(toca1,tocas[c1].x,tocas[c1].y,64,64)
-    }
+        if(tocas.length > 0){
+            
+        c.drawImage(toca1,tocas[0].x,tocas[0].y,64,64)
+    
+ 
+        
+    
     if(pausa == false){
-         tocas[c1].cooldown-=1
-         if(tocas[c1].cooldown <= 0){
-
-            tocas[c1].cooldown = 4000*(1/Dificuldade)
+         tocas[0].cooldown-=1
+         if(tocas[0].cooldown <= 0 && tocas[0].dentro == true){
+            tocas[0].cooldown = 0
+            tocas[0].dentro = false
             predadores[predadores.length] = Object.create(predador)
-            predadores[predadores.length-1].x = tocas[c1].x
-            predadores[predadores.length-1].y = tocas[c1].y
-            predadores[predadores.length-1].startx = tocas[c1].x
-            predadores[predadores.length-1].starty = tocas[c1].y
-            predadores[predadores.length-1].maximodetempo = 2000*Dificuldade
+            predadores[predadores.length-1].x = tocas[0].x
+            predadores[predadores.length-1].y = tocas[0].y
+            predadores[predadores.length-1].startx = tocas[0].x
+            predadores[predadores.length-1].starty = tocas[0].y
+            predadores[predadores.length-1].vx = 0
+            predadores[predadores.length-1].vy = 0
+            predadores[predadores.length-1].maximodetempo = 5000*Dificuldade
          }
 
     }
-    }
+        }
+
+        
+    
     c.filter = "none";
     for(c1=0;c1 < predadores.length ;c1++){
+        // Sempre desenhar o predador (sem piscar) - tic controla apenas animação
         if(predadores[c1].vx > 0){
-            if(predadores[c1].tic >= 0 && predadores[c1].tic < 5){
+            if(predadores[c1].tic < 5){
                 c.drawImage(predador1,predadores[c1].x*zoom,predadores[c1].y*zoom,64,64)
-            }
-            if(predadores[c1].tic >= 5 && predadores[c1].tic <= 10){
+            } else {
                 c.drawImage(predador2,predadores[c1].x*zoom,predadores[c1].y*zoom,64,64)
             }
         }
-        if(predadores[c1].vx < 0){
-            if(predadores[c1].tic >= 0 && predadores[c1].tic < 5){
+        else if(predadores[c1].vx < 0){
+            if(predadores[c1].tic < 5){
                 c.drawImage(predador3,predadores[c1].x*zoom,predadores[c1].y*zoom,64,64)
-            }
-            if(predadores[c1].tic >= 5 && predadores[c1].tic <= 10){
+            } else {
                 c.drawImage(predador4,predadores[c1].x*zoom,predadores[c1].y*zoom,64,64)
             }
-            
         }
+        else {
+            c.drawImage(predador1,predadores[c1].x*zoom,predadores[c1].y*zoom,64,64)
+        }
+
         if(pausa == false){
             predadores[c1].tic+=1
             if(predadores[c1].tic > 10){
@@ -427,7 +435,7 @@ function main(){ // funcao principal do jogo
         }
             for(c2=0;c2 < grupo.length ;c2++){
                 if(pontoColidecomCirculo(grupo[c2].x,grupo[c2].y,fabricas[c1].x,fabricas[c1].y,400*Dificuldade)){
-                   if(pausa == false){ grupo[c2].energia -= 10}
+                   if(pausa == false){ grupo[c2].energia -= 1}
                    c.drawImage(venenoimg,grupo[c2].x+10,grupo[c2].y-30,32,32)
                    grupo[c2].envenado = true
             }
@@ -591,7 +599,7 @@ c.fillRect(10,100,100,30)
                 c.fillText("Voltar",50,40)
 
              c.fillStyle = "rgba(34, 34, 44, 1)"
-            // Selecionar qual variável mostrar
+     
             let variavelGrafico = ["Velocidade", "Tamanho", "Energia", "Max Energia", "Cor", "Bonito", "Reprodução (max)", "Idade (max)", "Falante"]
             let historicoAtual = graficoAtual === 0 ? historicoVelocidade : 
                                   graficoAtual === 1 ? historicoTamanho : 
@@ -606,26 +614,25 @@ c.fillRect(10,100,100,30)
             c.font = "25px serif"
             c.fillText(variavelGrafico[graficoAtual] + " - Média do Grupo", 300, 90)
             
-            // Instruções
+         
             c.font = "14px serif"
             c.fillText("Clique para alternar variáveis (" + (graficoAtual + 1) + "/9)", 350, 125)
             
-            // Eixos
+    
             c.fillStyle = "rgba(252, 252, 252, 1)"
             c.fillRect(80, 150, 1050, 2)  // eixo X
             c.fillRect(80, 150, 2, 520)   // eixo Y
             
             c.font = "14px serif"
-            
-            // Labels eixo Y
+    
             c.fillText("Max", 20, 165)
             c.fillText("Med", 20, 415)
             c.fillText("Min", 20, 665)
             
-            // Labels eixo X
+        
             c.fillText("Ciclos:", 20, 720)
             
-            // Desenhar barras dinâmicas
+
             if(historicoAtual.length > 0){
                 let maxValor = Math.max(...historicoAtual) * 1.2
                 let larguraBarra = 90
@@ -636,28 +643,28 @@ c.fillRect(10,100,100,30)
                     let x = 100 + (i * espacoBarra)
                     let y = 670 - altura
                     
-                    // Cores diferentes por variável
+               
                     let cores = [
-                        "rgba(255, 100, 100, 1)",   // 0 Velocidade - vermelho
-                        "rgba(100, 150, 255, 1)",   // 1 Tamanho - azul
-                        "rgba(100, 255, 150, 1)",   // 2 Energia - verde
-                        "rgba(255, 200, 100, 1)",   // 3 Max Energia - laranja
-                        "rgba(255, 100, 200, 1)",   // 4 Cor - rosa
-                        "rgba(200, 100, 255, 1)",   // 5 Bonito - roxo
-                        "rgba(100, 255, 255, 1)",   // 6 Reprodução - ciano
-                        "rgba(255, 255, 100, 1)",   // 7 Idade - amarelo
-                        "rgba(150, 200, 100, 1)"    // 8 Falante - lima
+                        "rgba(255, 100, 100, 1)",  
+                        "rgba(100, 150, 255, 1)", 
+                        "rgba(100, 255, 150, 1)",  
+                        "rgba(255, 200, 100, 1)",   
+                        "rgba(255, 100, 200, 1)", 
+                        "rgba(200, 100, 255, 1)",   
+                        "rgba(100, 255, 255, 1)",  
+                        "rgba(255, 255, 100, 1)",   
+                        "rgba(150, 200, 100, 1)"  
                     ]
                     
                     c.fillStyle = cores[graficoAtual]
                     c.fillRect(x, y, larguraBarra, altura)
                     
-                    // Label x
+             
                     c.fillStyle = "rgba(252, 252, 252, 1)"
                     c.font = "12px serif"
                     c.fillText((i+1), x + 35, 720)
                     
-                    // Valor em cima da barra
+             
                     c.font = "11px serif"
                     c.fillText(historicoAtual[i].toFixed(1), x + 20, y - 5)
                 }
@@ -720,7 +727,7 @@ c.fillRect(10,100,100,30)
                 
            
         }   
-    setTimeout(main,velocidade)// chama e repete a função do main() "principal"
+    setTimeout(main,velocidade) 
 
 }
 
@@ -732,7 +739,7 @@ canvas.addEventListener("click",function(){
             tela = 2
         }
 
-        // Clique em qualquer lugar da tela alterna o gráfico
+       
         graficoAtual = (graficoAtual + 1) % 9
     }
 
@@ -797,7 +804,7 @@ canvas.addEventListener("click",function(){
 
         if(event.offsetX > 525 && event.offsetX < 525+140 && event.offsetY > 700 && event.offsetY < 700+50){
             tela = 2
-            // Reset dos históricos para novo gráfico
+       
             historicoVelocidade = []
             historicoTamanho = []
             historicoEnergia = []
@@ -862,12 +869,11 @@ canvas.addEventListener("click",function(){
             drawfabrica = false
         }
         if(!(event.offsetX > 930 && event.offsetX < 930+352 && event.offsetY > 50 && event.offsetY < 50+688) && drawtoca == true){
-        tocas[tocas.length] = Object.create(toca)
-        tocas[tocas.length-1].x = event.offsetX-32
-        tocas[tocas.length-1].y = event.offsetY-32
-        tocas[tocas.length-1].cooldown = 4000*(1/Dificuldade)
-        tocas[tocas.length-1].cooldownmax = 4000*(1/Dificuldade)
-
+        tocas[0] = Object.create(toca)
+        tocas[0].x = event.offsetX-32
+        tocas[0].y = event.offsetY-32
+        tocas[0].cooldown = 4000*(1/Dificuldade)
+        tocas[0].cooldownmax = 4000*(1/Dificuldade)     
     }
         if(event.offsetX > 950 && event.offsetX < 950+80 && event.offsetY > 540 && event.offsetY < 540+80 && menu == 1){
             
@@ -1024,7 +1030,6 @@ document.addEventListener("keyup", function(){
 
     if(event.keyCode === 13 && tela == 4){
     tela = 2
-    // Reset dos históricos para novo gráfico
     historicoVelocidade = []
     historicoTamanho = []
     historicoEnergia = []

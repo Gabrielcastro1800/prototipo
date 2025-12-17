@@ -248,7 +248,7 @@ function predadorhunt(id){
     let alvoMaisProximo = null
     let menorDistancia = Infinity
     
-    // Encontrar o animal mais próximo dentro do raio
+
     for(c1=0;c1 < grupo.length ;c1++){
         if(pontoColidecomCirculo(grupo[c1].x,grupo[c1].y,predadores[id].x,predadores[id].y,500)){
             let dist = Math.sqrt(Math.pow(grupo[c1].x - predadores[id].x, 2) + Math.pow(grupo[c1].y - predadores[id].y, 2))
@@ -259,33 +259,20 @@ function predadorhunt(id){
         }
     }
     
-    // Perseguir apenas o alvo mais próximo
+
     if(alvoMaisProximo !== null){
         c1 = alvoMaisProximo
         if(predadores[id].x < grupo[c1].x){
-            predadores[id].vx+=0.1
+            predadores[id].vx+=0.05
         }
         if(predadores[id].x > grupo[c1].x){
-            predadores[id].vx-=0.1
+            predadores[id].vx-=0.05
         }
         if(predadores[id].y < grupo[c1].y){
-            predadores[id].vy+=0.1
+            predadores[id].vy+=0.05
         }
         if(predadores[id].y > grupo[c1].y){
-            predadores[id].vy-=0.1
-        }
-                    
-        if(predadores[id].vx > 1 ){
-            predadores[id].vx = 1
-        }
-        if(predadores[id].vy > 1 ){
-            predadores[id].vy = 1
-        }
-        if(predadores[id].vx < -1 ){
-            predadores[id].vx = -1
-        }
-        if(predadores[id].vy < -1 ){
-            predadores[id].vy = -1
+            predadores[id].vy-=0.05
         }
 
         if(predadores[id].x > grupo[c1].x && predadores[id].x < grupo[c1].x+(80) && predadores[id].y > grupo[c1].y && predadores[id].y < grupo[c1].y+((80)) && grupo[c1].morto == false){
@@ -305,10 +292,26 @@ function predadorhunt(id){
                 grupo[c1].vy = 0
             }
         }
+    } else {
+        // Se não há alvo, reduzir velocidade gradualmente
+        predadores[id].vx *= 0.9
+        predadores[id].vy *= 0.9
     }
     
-    predadores[id].vx = predadores[id].vx
-    predadores[id].vy = predadores[id].vy
+    // Aplicar limites de velocidade SEMPRE (fora do if/else)
+    if(predadores[id].vx > 1.0){
+        predadores[id].vx = 1.0
+    }
+    if(predadores[id].vx < -1.0){
+        predadores[id].vx = -1.0
+    }
+    if(predadores[id].vy > 1.0){
+        predadores[id].vy = 1.0
+    }
+    if(predadores[id].vy < -1.0){
+        predadores[id].vy = -1.0
+    }
+    
     predadores[id].x += predadores[id].vx
     predadores[id].y += predadores[id].vy
 }
@@ -328,21 +331,30 @@ function predadorback(id){
         predadores[id].vy-=0.1
     }
 
-    if(predadores[id].vx > 1 ){
-        predadores[id].vx = 1
+    if(predadores[id].vx > 1.0 ){
+        predadores[id].vx = 1.0
     }
-    if(predadores[id].vy > 1 ){
-        predadores[id].vy = 1
+    if(predadores[id].vy > 1.0 ){
+        predadores[id].vy = 1.0
     }
-    if(predadores[id].vx < -1 ){
-        predadores[id].vx = -1
+    if(predadores[id].vx < -1.0 ){
+        predadores[id].vx = -1.0
     }
-    if(predadores[id].vy < -1 ){
-        predadores[id].vy = -1
+    if(predadores[id].vy < -1.0 ){
+        predadores[id].vy = -1.0
     }
     predadores[id].x += predadores[id].vx
     predadores[id].y += predadores[id].vy
-    if(predadores[id].x >= predadores[id].startx && predadores[id].x <= predadores[id].startx+32 && predadores[id].y >= predadores[id].starty && predadores[id].y <= predadores[id].starty+32){
+   try{ if(predadores[id].x >= predadores[id].startx && predadores[id].x <= predadores[id].startx+32 && predadores[id].y >= predadores[id].starty && predadores[id].y <= predadores[id].starty+32){
         predadores.splice(id,1)
+        tocas[0].dentro = true
+        tocas[0].cooldown = 4000*(1/Dificuldade)
     }
+
+    if(predadores[id].maximodetempo < -500){
+        predadores.splice(id,1)
+        tocas[0].dentro = true
+        tocas[0].cooldown = 4000*(1/Dificuldade)
+    }}
+    catch{}
 }
