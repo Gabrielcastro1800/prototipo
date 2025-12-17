@@ -116,6 +116,7 @@ let historicoIdademax = []
 let historicoFalante = []
 let ultimoDiaGrafico = 0
 let graficoAtual = 0  // 0-8 para cada variável
+let graficoOffset = 0 // índice inicial para rolagem do gráfico (janela de 7 ciclos)
 
 
 
@@ -256,6 +257,10 @@ function main(){ // funcao principal do jogo
 
         wander(c1)
         grupo[c1].reproducool+=1
+        if(grupo[c1].reproducool > grupo[c1].reproducoolmax){
+            grupo[c1].reproducool = grupo[c1].reproducoolmax
+        }
+
         grupo[c1].idade+=1
         repro(c1)
    
@@ -609,64 +614,83 @@ c.fillRect(10,100,100,30)
                                   graficoAtual === 5 ? historicoBonito :
                                   graficoAtual === 6 ? historicoReproducoolmax :
                                   graficoAtual === 7 ? historicoIdademax : historicoFalante
-            
+
             c.fillStyle = "rgba(252, 252, 252, 1)"
             c.font = "25px serif"
             c.fillText(variavelGrafico[graficoAtual] + " - Média do Grupo", 300, 90)
-            
-         
+
             c.font = "14px serif"
             c.fillText("Clique para alternar variáveis (" + (graficoAtual + 1) + "/9)", 350, 125)
-            
-    
+            c.fillText("Use ← → para rolar ciclos", 600, 125)
+
+            // Desenhar setas de rolagem
+            let arrowSize = 28
+            let arrowY = 120
+            let leftX = 80
+            let rightX = 80 + 1050 - arrowSize
+            // estilo das setas (desabilitado se não houver mais para rolar)
+            c.fillStyle = (graficoOffset > 0) ? "rgba(220,220,220,1)" : "rgba(120,120,120,0.5)"
+            c.fillRect(leftX, arrowY, arrowSize, arrowSize)
+            c.fillStyle = "black"
+            c.font = "20px serif"
+            c.fillText("<", leftX + 8, arrowY + 20)
+
+            c.fillStyle = (historicoAtual.length > (graficoOffset + 7)) ? "rgba(220,220,220,1)" : "rgba(120,120,120,0.5)"
+            c.fillRect(rightX, arrowY, arrowSize, arrowSize)
+            c.fillStyle = "black"
+            c.fillText(">", rightX + 6, arrowY + 20)
+
             c.fillStyle = "rgba(252, 252, 252, 1)"
             c.fillRect(80, 150, 1050, 2)  // eixo X
             c.fillRect(80, 150, 2, 520)   // eixo Y
-            
+
             c.font = "14px serif"
-    
+
             c.fillText("Max", 20, 165)
             c.fillText("Med", 20, 415)
             c.fillText("Min", 20, 665)
-            
-        
+
             c.fillText("Ciclos:", 20, 720)
-            
 
             if(historicoAtual.length > 0){
+                // ajustar graficoOffset caso dados tenham diminuído
+                if(graficoOffset < 0) graficoOffset = 0
+                if(graficoOffset > Math.max(0, historicoAtual.length - 7)) graficoOffset = Math.max(0, historicoAtual.length - 7)
+
                 let maxValor = Math.max(...historicoAtual) * 1.2
                 let larguraBarra = 90
                 let espacoBarra = 120
-                
-                for(let i = 0; i < historicoAtual.length && i < 7; i++){
-                    let altura = (historicoAtual[i] / maxValor) * 520
-                    let x = 100 + (i * espacoBarra)
+                let startIndex = graficoOffset
+                let visibleCount = Math.min(7, historicoAtual.length - startIndex)
+
+                let cores = [
+                    "rgba(255, 100, 100, 1)",  
+                    "rgba(100, 150, 255, 1)", 
+                    "rgba(100, 255, 150, 1)",  
+                    "rgba(255, 200, 100, 1)",   
+                    "rgba(255, 100, 200, 1)", 
+                    "rgba(200, 100, 255, 1)",   
+                    "rgba(100, 255, 255, 1)",  
+                    "rgba(255, 255, 100, 1)",   
+                    "rgba(150, 200, 100, 1)"
+                ]
+
+                for(let idx = 0; idx < visibleCount; idx++){
+                    let i = startIndex + idx
+                    let value = historicoAtual[i] || 0
+                    let altura = (value / maxValor) * 520
+                    let x = 100 + (idx * espacoBarra)
                     let y = 670 - altura
-                    
-               
-                    let cores = [
-                        "rgba(255, 100, 100, 1)",  
-                        "rgba(100, 150, 255, 1)", 
-                        "rgba(100, 255, 150, 1)",  
-                        "rgba(255, 200, 100, 1)",   
-                        "rgba(255, 100, 200, 1)", 
-                        "rgba(200, 100, 255, 1)",   
-                        "rgba(100, 255, 255, 1)",  
-                        "rgba(255, 255, 100, 1)",   
-                        "rgba(150, 200, 100, 1)"  
-                    ]
-                    
+
                     c.fillStyle = cores[graficoAtual]
                     c.fillRect(x, y, larguraBarra, altura)
-                    
-             
+
                     c.fillStyle = "rgba(252, 252, 252, 1)"
                     c.font = "12px serif"
-                    c.fillText((i+1), x + 35, 720)
-                    
-             
+                    c.fillText((i+1), x + 35, 720) // número do ciclo
+
                     c.font = "11px serif"
-                    c.fillText(historicoAtual[i].toFixed(1), x + 20, y - 5)
+                    c.fillText(value.toFixed(1), x + 20, y - 5)
                 }
             } else {
                 c.fillStyle = "rgba(150, 150, 150, 1)"
@@ -737,9 +761,39 @@ canvas.addEventListener("click",function(){
 
         if(event.offsetX > 20 && event.offsetX < 20+100 && event.offsetY > 20 && event.offsetY < 20+30){
             tela = 2
+            return
         }
 
-       
+        // Mapeamento do historico atual (mesma lógica que no render)
+        let historicoAtual = graficoAtual === 0 ? historicoVelocidade : 
+                              graficoAtual === 1 ? historicoTamanho : 
+                              graficoAtual === 2 ? historicoEnergia :
+                              graficoAtual === 3 ? historicoMaxenergia :
+                              graficoAtual === 4 ? historicoCor :
+                              graficoAtual === 5 ? historicoBonito :
+                              graficoAtual === 6 ? historicoReproducoolmax :
+                              graficoAtual === 7 ? historicoIdademax : historicoFalante
+
+        // coordenadas das setas (deve coincidir com a renderização)
+        let arrowSize = 28
+        let arrowY = 120
+        let leftX = 80
+        let rightX = 80 + 1050 - arrowSize
+
+        // clique na seta esquerda -> rolar para trás
+        if(event.offsetX >= leftX && event.offsetX <= leftX + arrowSize && event.offsetY >= arrowY && event.offsetY <= arrowY + arrowSize){
+            graficoOffset = Math.max(0, graficoOffset - 1)
+            return
+        }
+
+        // clique na seta direita -> rolar para frente
+        if(event.offsetX >= rightX && event.offsetX <= rightX + arrowSize && event.offsetY >= arrowY && event.offsetY <= arrowY + arrowSize){
+            let maxOffset = Math.max(0, historicoAtual.length - 7)
+            graficoOffset = Math.min(maxOffset, graficoOffset + 1)
+            return
+        }
+
+        // clique padrão alterna a variável do gráfico
         graficoAtual = (graficoAtual + 1) % 9
     }
 
