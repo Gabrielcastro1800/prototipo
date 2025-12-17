@@ -582,7 +582,15 @@ c.fillRect(10,100,100,30)
         if(tela == 3){
             c.fillStyle = "rgba(34, 34, 44, 1)"
             c.fillRect(0,0,canvas.width,canvas.height)
-            
+
+            c.fillStyle = "red"
+             c.fillRect(20,20,100,30)
+
+             c.font = "20px Arial"
+                c.fillStyle = "black"
+                c.fillText("Voltar",50,40)
+
+             c.fillStyle = "rgba(34, 34, 44, 1)"
             // Selecionar qual variável mostrar
             let variavelGrafico = ["Velocidade", "Tamanho", "Energia", "Max Energia", "Cor", "Bonito", "Reprodução (max)", "Idade (max)", "Falante"]
             let historicoAtual = graficoAtual === 0 ? historicoVelocidade : 
@@ -719,6 +727,11 @@ c.fillRect(10,100,100,30)
 canvas.addEventListener("click",function(){
 
     if(tela == 3){
+
+        if(event.offsetX > 20 && event.offsetX < 20+100 && event.offsetY > 20 && event.offsetY < 20+30){
+            tela = 2
+        }
+
         // Clique em qualquer lugar da tela alterna o gráfico
         graficoAtual = (graficoAtual + 1) % 9
     }
