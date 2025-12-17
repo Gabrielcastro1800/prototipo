@@ -43,7 +43,7 @@ const toca = {
     x:0,
     y:0,
     cooldown:4000,
-    cooldown:4000,
+    cooldownmax:4000,
     dentro: true
 }
 const predador = {
@@ -351,8 +351,8 @@ function main(){ // funcao principal do jogo
     
     if(pausa == false){
          tocas[0].cooldown-=1
-         if(tocas[0].cooldown <= 0 && tocas[0].dentro == true){
-            tocas[0].cooldown = 0
+         if(tocas[0].cooldown == 0 && tocas[0].dentro == true){
+            tocas[0].cooldown = -1
             tocas[0].dentro = false
             predadores[predadores.length] = Object.create(predador)
             predadores[predadores.length-1].x = tocas[0].x

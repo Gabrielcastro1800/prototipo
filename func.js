@@ -293,23 +293,23 @@ function predadorhunt(id){
             }
         }
     } else {
-        // Se não há alvo, reduzir velocidade gradualmente
+   
         predadores[id].vx *= 0.9
         predadores[id].vy *= 0.9
     }
     
-    // Aplicar limites de velocidade SEMPRE (fora do if/else)
-    if(predadores[id].vx > 1.0){
-        predadores[id].vx = 1.0
+
+    if(predadores[id].vx > 3.0){
+        predadores[id].vx = 3.0
     }
-    if(predadores[id].vx < -1.0){
-        predadores[id].vx = -1.0
+    if(predadores[id].vx < -3.0){
+        predadores[id].vx = -3.0
     }
-    if(predadores[id].vy > 1.0){
-        predadores[id].vy = 1.0
+    if(predadores[id].vy > 3.0){
+        predadores[id].vy = 3.0
     }
-    if(predadores[id].vy < -1.0){
-        predadores[id].vy = -1.0
+    if(predadores[id].vy < -3.0){
+        predadores[id].vy = -3.0
     }
     
     predadores[id].x += predadores[id].vx
@@ -331,17 +331,17 @@ function predadorback(id){
         predadores[id].vy-=0.1
     }
 
-    if(predadores[id].vx > 1.0 ){
-        predadores[id].vx = 1.0
+    if(predadores[id].vx > 3.0 ){
+        predadores[id].vx = 3.0
     }
-    if(predadores[id].vy > 1.0 ){
-        predadores[id].vy = 1.0
+    if(predadores[id].vy > 3.0 ){
+        predadores[id].vy = 3.0
     }
-    if(predadores[id].vx < -1.0 ){
-        predadores[id].vx = -1.0
+    if(predadores[id].vx < -3.0 ){
+        predadores[id].vx = -3.0
     }
-    if(predadores[id].vy < -1.0 ){
-        predadores[id].vy = -1.0
+    if(predadores[id].vy < -3.0 ){
+        predadores[id].vy = -3.0
     }
     predadores[id].x += predadores[id].vx
     predadores[id].y += predadores[id].vy
