@@ -36,6 +36,14 @@ const animal = { // objeto do animal base
     reproducoolmax:1000,
     reproducool:0,
 };      
+
+
+    const fabrica = {
+    x:0,
+    y:0,
+    poluicao:0,
+    tic:0
+    }
     //probriendades marcadas com *** são genes ou status que provavelmente serão auterados
     // de pai pra filhos
 let grupo = []
@@ -48,6 +56,7 @@ let movezoomy = 0
 let dias = 0
 let diastic = 0
 let menu = 0
+let drawfabrica = false
 
 let bioma = 0
 
@@ -59,6 +68,8 @@ let causa = ""
 
 let quantidadeini = 15
 let remov = false
+let fabricas = []
+let mainStarted = false;
 
 
 let ids = 0 // ids quantidade de objs no vetor grupo[]
@@ -146,8 +157,11 @@ function main(){ // funcao principal do jogo
 
         if(grupo[c1].morto == false){
         
-       if(pausa == false){ if(grupo[c1].objetivocool < 0 && grupo[c1].energia > grupo[c1].maxenergia/2){objetivo(c1)}
+       if(pausa == false){
+
         if(grupo[c1].objetivocool < 0 && grupo[c1].energia < grupo[c1].maxenergia/2){objetivocomida(c1)}
+        if(grupo[c1].objetivocool < 0 && grupo[c1].energia > grupo[c1].maxenergia/2){objetivo(c1)}
+        
         grupo[c1].objetivocool--
 
         wander(c1)
@@ -210,13 +224,10 @@ function main(){ // funcao principal do jogo
 
         if(grupo[c1].falando > grupo[c1].falante && grupo[c1].f == false){
             grupo[c1].falando = 0
-            grupo[c1].f = true
+            grupo[c1].f = !grupo[c1].f
             grupo[c1].pensando = falas[Math.ceil(Math.random()*falas.length-1)]
         }
-        else{
-            grupo[c1].falando = 0
-            grupo[c1].f = false
-        }
+       
 
 
 
@@ -239,8 +250,42 @@ function main(){ // funcao principal do jogo
         }
       
     }
+     for(c1=0;c1 < fabricas.length ;c1++){
 
+            if(pausa == false){
+                fabricas[c1].tic+=1
 
+                if(fabricas[c1].tic > 30){
+                    fabricas[c1].tic = 0
+                }
+            }
+
+            if(fabricas[c1].tic >= 0 && fabricas[c1].tic < 10){
+                c.drawImage(fab,fabricas[c1].x*zoom,fabricas[c1].y*zoom,128,128)
+            }
+            if(fabricas[c1].tic >= 10 && fabricas[c1].tic < 20){
+                c.drawImage(fab2,fabricas[c1].x*zoom,fabricas[c1].y*zoom,128,128)
+            }
+            if(fabricas[c1].tic >= 20 && fabricas[c1].tic <= 30){
+                c.drawImage(fab3,fabricas[c1].x*zoom,fabricas[c1].y*zoom,128,128)
+            }
+
+            for(c2=0;c2 < arv.length ;c2++){
+         
+                if(pontoColidecomCirculo(arv[c2].x,arv[c2].y,fabricas[c1].x,fabricas[c1].y,500)){
+                   if(pausa == false){ arv[c2].comida -= 0.25 }
+                 
+            }
+        }
+            for(c2=0;c2 < grupo.length ;c2++){
+                if(pontoColidecomCirculo(grupo[c2].x,grupo[c2].y,fabricas[c1].x,fabricas[c1].y,400)){
+                   if(pausa == false){ grupo[c2].energia -= 10}
+            }
+        }
+                
+
+    
+    }
 
     for(c1=0;c1 < arv.length ;c1++){
 
@@ -260,6 +305,7 @@ function main(){ // funcao principal do jogo
             
 
     }
+   
 
 
     for(c1=0;c1 < grupo.length ;c1++){
@@ -294,15 +340,22 @@ function main(){ // funcao principal do jogo
          c.drawImage(testtree,950,630,64,64)
 
 
-
+    if(drawfabrica == false){
+        c.fillStyle = "red"
+         c.fillRect(950,540,80,80)
+    }
+    else{
+        c.fillStyle = "gray"
+         c.fillRect(950,540,80,80)
+    }
     c.fillStyle = "red"
-    c.fillRect(950,540,80,80)
-
-    c.drawImage(fabrica,950,540,64,64)
+   
+    
+    c.drawImage(fab,950,540,64,64)
 
     c.fillRect(1040,540,80,80)
 
-    c.drawImage(fabrica,950,540,64,64)
+
     c.drawImage(toca2,1040,540,64,64)
 
     c.fillStyle = "red"
@@ -520,9 +573,20 @@ canvas.addEventListener("click",function(){
         }
     }
 
-
+    if(!(event.offsetX > 930 && event.offsetX < 930+352 && event.offsetY > 50 && event.offsetY < 50+688) && drawfabrica == true){
+        fabricas[fabricas.length] = Object.create(fabrica)
+        fabricas[fabricas.length-1].x = event.offsetX-64
+        fabricas[fabricas.length-1].y = event.offsetY-64
+    }
 
     if(tela == 2){
+        if(event.offsetX > 950 && event.offsetX < 950+80 && event.offsetY > 540 && event.offsetY < 540+80 && menu == 1){
+            
+            drawfabrica = !drawfabrica
+            remov = false
+            drawarvore = false
+        }
+           
         if(event.offsetX > 950 && event.offsetX < 950+130 && event.offsetY > 200 && event.offsetY < 200+40 && menu == 1){
                     grupo = [];
                     arv = [];
@@ -558,6 +622,7 @@ canvas.addEventListener("click",function(){
         if( event.offsetX > 950 && event.offsetX < event.offsetX+130 && event.offsetY > 150 && event.offsetY < 150+40 && menu == 1){
             remov = !remov
             drawarvore = false
+            drawfabrica = false
         }
 
         if(remov == true){
@@ -610,22 +675,17 @@ canvas.addEventListener("click",function(){
             }
             if( event.offsetX > 950 && event.offsetX < 950+80 && event.offsetY > 630 && event.offsetY < 630+80){
              drawarvore = !drawarvore
-             remov = false
+             remov = false 
+                drawfabrica = false
              }
-                if(menu == 1){
+            
                     if( !(event.offsetX > 930 && event.offsetX < 930+352 && event.offsetY > 50 && event.offsetY < 50+688) && tela == 2 && drawarvore == true){
                 arv[arv.length] = Object.create(arvore)
                  arv[arv.length-1].x = event.offsetX-32
                  arv[arv.length-1].y = event.offsetY-32
                 }
-                 if(menu == 0){
-                    if( tela == 2 && drawarvore == true){
-                    arv[arv.length] = Object.create(arvore)
-                    arv[arv.length-1].x = event.offsetX-32
-                    arv[arv.length-1].y = event.offsetY-32
-                }
-                 }
-                }
+               
+                
 
 
                 
@@ -685,7 +745,7 @@ grass.onload = () => {
 
 
         bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
-        main()
+        if (!mainStarted) { mainStarted = true; main(); }
 
 }
 

@@ -87,7 +87,7 @@ function objetivo(id){
 
 
 
-    grupo[id].objetivocool = 600
+    grupo[id].objetivocool = 50
 }
 function objetivocomida(id){
     arvcomcomida = []
@@ -214,4 +214,10 @@ function random(min, max) {
     au = Math.random() * (max - min) + min
     au.toFixed(2)
     return au;
+}
+
+function pontoColidecomCirculo(px, py, cx, cy, raio) {
+  const dx = px - cx
+  const dy = py - cy
+  return (dx * dx + dy * dy) <= raio * raio
 }

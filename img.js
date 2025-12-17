@@ -46,8 +46,16 @@ square.src = "sprites/bota/square.png"
 let sele2 = new Image();
 sele2.src = "sprites/bota/sele2.png"
 
-let fabrica = new Image();
-fabrica.src = "sprites/fabrica/fabrica.png"
+
 
 let toca2 = new Image();
 toca2.src = "sprites/predador/toca2.png"
+
+
+let fab = new Image();
+fab.src = "sprites/fabrica/fabrica.png"
+
+let fab2 = new Image();
+fab2.src = "sprites/fabrica/fabrica2.png"
+let fab3 = new Image();
+fab3.src = "sprites/fabrica/fabrica3.png"
