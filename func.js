@@ -248,38 +248,56 @@ function predadorhunt(id){
     for(c1=0;c1 < grupo.length ;c1++){
         if(pontoColidecomCirculo(grupo[c1].x,grupo[c1].y,predadores[id].x,predadores[id].y,500)){
             if(predadores[id].x < grupo[c1].x){
-                predadores[id].vx+=0.2
+                predadores[id].vx+=0.1
             }
             if(predadores[id].x > grupo[c1].x){
-                predadores[id].vx-=0.2
+                predadores[id].vx-=0.1
             }
             if(predadores[id].y < grupo[c1].y){
-                predadores[id].vy+=0.2
+                predadores[id].vy+=0.1
             }
             if(predadores[id].y > grupo[c1].y){
-                predadores[id].vy-=0.2}
+                predadores[id].vy-=0.1}
+                            
+                                if(predadores[id].vx > 1 ){
+                        predadores[id].vx = 1
+                    }
+                    if(predadores[id].vy > 1 ){
+                        predadores[id].vy = 1
+                    }
+                    if(predadores[id].vx < -1 ){
+                        predadores[id].vx = -1
+                    }
+                    if(predadores[id].vy < -1 ){
+                        predadores[id].vy = -1
+                    }
 
             if(predadores[id].x > grupo[c1].x && predadores[id].x < grupo[c1].x+(80) && predadores[id].y > grupo[c1].y && predadores[id].y < grupo[c1].y+((80)) && grupo[c1].morto == false){
-                grupo[c1].morto = true
-                causa = grupo[c1].nome+" foi devorado por um predador."
-                predadores[id].maximodetempo -= 500
-                grupo[c1].vx = 0
-                grupo[c1].vy = 0
+
+
+
+               let distancia = Math.abs(grupo[c1].cor -100)
+               let chance = distancia/155
+
+               if(bioma == 1){
+                   distancia = Math.abs(grupo[c1].cor -35)
+                     chance = distancia/220
+               }
+
+
+                if(Math.random() > chance){
+                    grupo[c1].morto = true
+                    causa = grupo[c1].nome+" foi devorado por um predador."
+                    predadores[id].maximodetempo -= 500
+                    grupo[c1].vx = 0
+                    grupo[c1].vy = 0
+                }
+                
+
+              
                 
             }
         
-    }
-    if(predadores[id].vx > 1 ){
-        predadores[id].vx = 1
-    }
-    if(predadores[id].vy > 1 ){
-        predadores[id].vy = 1
-    }
-    if(predadores[id].vx < -1 ){
-        predadores[id].vx = -1
-    }
-    if(predadores[id].vy < -1 ){
-        predadores[id].vy = -1
     }
     predadores[id].x += predadores[id].vx
     predadores[id].y += predadores[id].vy

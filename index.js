@@ -130,14 +130,19 @@ let select = 1
 let pos = false
 
 
-
+let filt = 0
 
 function main(){ // funcao principal do jogo
 
     
 
     
+    if(tela == 7){
+        c.clearRect(0,0,canvas.width,canvas.height)
 
+        c.filter = "hue-rotate("+filt+"deg)";
+       c.drawImage(sprite1, 128, 128, 128, 120); 
+    }
 
 
     ids = grupo.length
@@ -192,8 +197,16 @@ function main(){ // funcao principal do jogo
             if(grupo[c1].vy > grupo[c1].velocidade){grupo[c1].vy = grupo[c1].velocidade}
             if(grupo[c1].vx < -grupo[c1].velocidade){grupo[c1].vx = -grupo[c1].velocidade}
             if(grupo[c1].vy < -grupo[c1].velocidade){grupo[c1].vy = -grupo[c1].velocidade}
+
             grupo[c1].fuga = true
         }
+        else{
+            grupo[c1].fuga = false
+        }
+        if(predadores.length == 0){
+            grupo[c1].fuga = false
+        }
+
         }
 
              if(grupo[c1].objetivocool < 0 && grupo[c1].energia < grupo[c1].maxenergia/2 && grupo[c1].fuga == false){objetivocomida(c1)}
@@ -512,7 +525,7 @@ c.fillRect(10,100,100,30)
      c.fillText("Finalizar",10,120)
     c.fillText(velocidadeswitch+"x",120,80)
 
-    if(mostrarinfo >= 0){
+    try{if(mostrarinfo >= 0){
         c.drawImage(square, grupo[mostrarinfo].x-60, grupo[mostrarinfo].y-200,150,200);
 
         c.fillStyle = "black"
@@ -526,7 +539,8 @@ c.fillRect(10,100,100,30)
         c.fillText("Bonito: "+grupo[mostrarinfo].bonito.toFixed(2), grupo[mostrarinfo].x-50, grupo[mostrarinfo].y-60);
         c.fillText("Energia: "+Math.floor((grupo[mostrarinfo].energia/grupo[mostrarinfo].maxenergia)*100)+"%", grupo[mostrarinfo].x-50, grupo[mostrarinfo].y-40);
         c.fillText("Reprodução: "+Math.floor(grupo[mostrarinfo].reproducool)+"/"+grupo[mostrarinfo].reproducoolmax, grupo[mostrarinfo].x-50, grupo[mostrarinfo].y-20);
-    }
+    }}
+    catch{}
 
  
 
