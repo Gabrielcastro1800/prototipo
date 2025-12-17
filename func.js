@@ -245,66 +245,74 @@ function pontoColidecomCirculo(px, py, cx, cy, raio) {
 }
 
 function predadorhunt(id){
+    let alvoMaisProximo = null
+    let menorDistancia = Infinity
+    
+    // Encontrar o animal mais próximo dentro do raio
     for(c1=0;c1 < grupo.length ;c1++){
         if(pontoColidecomCirculo(grupo[c1].x,grupo[c1].y,predadores[id].x,predadores[id].y,500)){
-            if(predadores[id].x < grupo[c1].x){
-                predadores[id].vx+=0.1
+            let dist = Math.sqrt(Math.pow(grupo[c1].x - predadores[id].x, 2) + Math.pow(grupo[c1].y - predadores[id].y, 2))
+            if(dist < menorDistancia){
+                menorDistancia = dist
+                alvoMaisProximo = c1
             }
-            if(predadores[id].x > grupo[c1].x){
-                predadores[id].vx-=0.1
-            }
-            if(predadores[id].y < grupo[c1].y){
-                predadores[id].vy+=0.1
-            }
-            if(predadores[id].y > grupo[c1].y){
-                predadores[id].vy-=0.1}
-                            
-                                if(predadores[id].vx > 1 ){
-                        predadores[id].vx = 1
-                    }
-                    if(predadores[id].vy > 1 ){
-                        predadores[id].vy = 1
-                    }
-                    if(predadores[id].vx < -1 ){
-                        predadores[id].vx = -1
-                    }
-                    if(predadores[id].vy < -1 ){
-                        predadores[id].vy = -1
-                    }
-
-            if(predadores[id].x > grupo[c1].x && predadores[id].x < grupo[c1].x+(80) && predadores[id].y > grupo[c1].y && predadores[id].y < grupo[c1].y+((80)) && grupo[c1].morto == false){
-
-
-
-               let distancia = Math.abs(grupo[c1].cor -100)
-               let chance = distancia/155
-
-               if(bioma == 1){
-                   distancia = Math.abs(grupo[c1].cor -35)
-                     chance = distancia/220
-               }
-
-
-                if(Math.random() > chance){
-                    grupo[c1].morto = true
-                    causa = grupo[c1].nome+" foi devorado por um predador."
-                    predadores[id].maximodetempo -= 500
-                    grupo[c1].vx = 0
-                    grupo[c1].vy = 0
-                }
-                
-
-              
-                
-            }
-        
+        }
     }
+    
+    // Perseguir apenas o alvo mais próximo
+    if(alvoMaisProximo !== null){
+        c1 = alvoMaisProximo
+        if(predadores[id].x < grupo[c1].x){
+            predadores[id].vx+=0.1
+        }
+        if(predadores[id].x > grupo[c1].x){
+            predadores[id].vx-=0.1
+        }
+        if(predadores[id].y < grupo[c1].y){
+            predadores[id].vy+=0.1
+        }
+        if(predadores[id].y > grupo[c1].y){
+            predadores[id].vy-=0.1
+        }
+                    
+        if(predadores[id].vx > 1 ){
+            predadores[id].vx = 1
+        }
+        if(predadores[id].vy > 1 ){
+            predadores[id].vy = 1
+        }
+        if(predadores[id].vx < -1 ){
+            predadores[id].vx = -1
+        }
+        if(predadores[id].vy < -1 ){
+            predadores[id].vy = -1
+        }
+
+        if(predadores[id].x > grupo[c1].x && predadores[id].x < grupo[c1].x+(80) && predadores[id].y > grupo[c1].y && predadores[id].y < grupo[c1].y+((80)) && grupo[c1].morto == false){
+            let distancia = Math.abs(grupo[c1].cor -100)
+            let chance = distancia/155
+
+            if(bioma == 1){
+                distancia = Math.abs(grupo[c1].cor -35)
+                chance = distancia/220
+            }
+
+            if(Math.random() > chance){
+                grupo[c1].morto = true
+                causa = grupo[c1].nome+" foi devorado por um predador."
+                predadores[id].maximodetempo -= 500
+                grupo[c1].vx = 0
+                grupo[c1].vy = 0
+            }
+        }
+    }
+    
     predadores[id].vx = predadores[id].vx.toFixed(2)
     predadores[id].vy = predadores[id].vy.toFixed(2)
     predadores[id].x += predadores[id].vx
     predadores[id].y += predadores[id].vy
 }
-}
+
 
 function predadorback(id){
     if(predadores[id].x < predadores[id].startx){
