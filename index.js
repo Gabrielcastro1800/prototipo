@@ -137,11 +137,11 @@ function main(){ // funcao principal do jogo
        Populacao=grupo.length
 
     c.drawImage(bgCanvas, 0, 0,canvas.width*zoom,canvas.height*zoom);
-    for(c1=0;c1 < grupo.length ;c1++){ // chama as funcoes para cada animal
+    for(c1=0;c1 < grupo.length ;c1++){ 
         if(pausa == false){ if(grupo[c1].energia <= 0){grupo[c1].morto = true; causa = "id:"+c1+" Morreu de fome"}
          if(grupo[c1].idade >= grupo[c1].idademax){grupo[c1].morto = true;causa = "id:"+c1+" Morreu de velhice"}}
-        
-        
+            
+         
 
 
         if(grupo[c1].morto == false){
@@ -213,7 +213,7 @@ function main(){ // funcao principal do jogo
             grupo[c1].f = true
             grupo[c1].pensando = falas[Math.ceil(Math.random()*falas.length-1)]
         }
-        if(grupo[c1].falando > grupo[c1].falante && grupo[c1].f == true){
+        else{
             grupo[c1].falando = 0
             grupo[c1].f = false
         }
@@ -225,21 +225,19 @@ function main(){ // funcao principal do jogo
 
   
 
-        if(pos == true){
-            c.fillStyle = "Black"
-            c.fillText(grupo[c1].energia,grupo[c1].x*zoom,grupo[c1].y*zoom)
-        }
 
         }else{
             if(grupo[c1].mortotics < 80){
                 c.drawImage(dead,grupo[c1].x*zoom,(grupo[c1].y*zoom)+movezoomy,(32*zoom)*grupo[c1].tamanho,(32*zoom)*grupo[c1].tamanho)
                if(pausa == false){grupo[c1].mortotics++} 
+                
             }
-            if(grupo[c1].mortotics >80){
+            if(grupo[c1].mortotics == 80){
                 grupo.splice(c1,1)
             }
+            
         }
-    
+      
     }
 
 
@@ -285,11 +283,12 @@ function main(){ // funcao principal do jogo
           if(drawarvore == false){
             c.fillStyle = "red"
             c.fillRect(950,630,80,80)
-    }
-    if(drawarvore == true){
-            c.fillStyle = "gray"
+    }else{
+        c.fillStyle = "gray"
             c.fillRect(950,630,80,80)
     }
+            
+    
 
       
          c.drawImage(testtree,950,630,64,64)
@@ -314,11 +313,12 @@ function main(){ // funcao principal do jogo
    if(remov == false){
     c.fillStyle = "red"
     c.fillRect(950,150,130,40)
-   }
-   if(remov == true){
+   }else{
     c.fillStyle = "gray"
     c.fillRect(950,150,130,40)
    }
+
+   
    c.fillStyle = "red"
    c.fillRect(950,200,130,40)
     c.fillStyle = "Black"  
@@ -326,7 +326,8 @@ function main(){ // funcao principal do jogo
     c.fillText("Adicionar Animal",955,120)
     c.fillText("Remover",955,170)
     c.fillText("Limpar",955,220)
-    }
+}
+   
 
     c.fillStyle = "red"
 c.fillRect(10,60,100,30)
@@ -450,11 +451,31 @@ canvas.addEventListener("click",function(){
             if(bioma > 1){
                 bioma = 0
             }
+            if(bioma == 1){
+                testtree2.src = "sprites/natural/arbusto.png"
+
+                 grass.src = "sprites/natural/sand.png"
+            }
+            if(bioma == 0){
+                testtree2.src = "sprites/natural/arv2.png"
+
+                 grass.src = "sprites/natural/grass.png"
+            }
         }
         if(event.offsetX > 310 && event.offsetX < 310+32 && event.offsetY > 260 && event.offsetY < 260+32){
             bioma-=1
             if(bioma < 0){
                 bioma = 1
+            }
+            if(bioma == 1){
+                testtree2.src = "sprites/natural/arbusto.png"
+
+                 grass.src = "sprites/natural/sand.png"
+            }
+            if(bioma == 0){
+                testtree2.src = "sprites/natural/arv2.png"
+
+                 grass.src = "sprites/natural/grass.png"
             }
         }
 
@@ -570,12 +591,12 @@ canvas.addEventListener("click",function(){
          if( event.offsetX > 10 && event.offsetX < 10+100 && event.offsetY > 60 && event.offsetY < 60+30 ){
         switch(velocidadeswitch){
             case 1: 
-                    velocidade = 10
+                    velocidade = 5
                     velocidadeswitch = 2
                     
                     break;
             case 2:
-                velocidade = 1
+                velocidade = 0
                 velocidadeswitch = 3
             
                 break;
