@@ -35,6 +35,8 @@ const animal = { // objeto do animal base
     idademax:0,
     reproducoolmax:1000,
     reproducool:0,
+    fuga: false,
+    envenado: false
 };      
 
 const toca = {
@@ -48,7 +50,9 @@ const predador = {
     maximodetempo:2000,
     vx:0,
     vy:0,
-    tic:0
+    tic:0,
+    startx:0,
+    starty:0
 }
 
 
@@ -175,8 +179,23 @@ function main(){ // funcao principal do jogo
         
        if(pausa == false){
 
-        if(grupo[c1].objetivocool < 0 && grupo[c1].energia < grupo[c1].maxenergia/2){objetivocomida(c1)}
-        if(grupo[c1].objetivocool < 0 && grupo[c1].energia > grupo[c1].maxenergia/2){objetivo(c1)}
+        for(c2=0;c2 < predadores.length ;c2++){
+             if(pontoColidecomCirculo(predadores[c2].x,predadores[c2].y,grupo[c1].x,grupo[c1].y,300)){
+            grupo[c1].vx+= (grupo[c1].x - predadores[c2].x) * 0.01
+            grupo[c1].vy+= (grupo[c1].y - predadores[c2].y) * 0.01
+            if(grupo[c1].vx > grupo[c1].velocidade){grupo[c1].vx = grupo[c1].velocidade}
+            if(grupo[c1].vy > grupo[c1].velocidade){grupo[c1].vy = grupo[c1].velocidade}
+            if(grupo[c1].vx < -grupo[c1].velocidade){grupo[c1].vx = -grupo[c1].velocidade}
+            if(grupo[c1].vy < -grupo[c1].velocidade){grupo[c1].vy = -grupo[c1].velocidade}
+            grupo[c1].fuga = true
+        }
+        }
+
+             if(grupo[c1].objetivocool < 0 && grupo[c1].energia < grupo[c1].maxenergia/2 && grupo[c1].fuga == false){objetivocomida(c1)}
+        if(grupo[c1].objetivocool < 0 && grupo[c1].energia > grupo[c1].maxenergia/2 && grupo[c1].fuga == false){objetivo(c1)}
+        
+
+       
         
         grupo[c1].objetivocool--
 
@@ -283,6 +302,8 @@ function main(){ // funcao principal do jogo
             predadores[predadores.length] = Object.create(predador)
             predadores[predadores.length-1].x = tocas[c1].x
             predadores[predadores.length-1].y = tocas[c1].y
+            predadores[predadores.length-1].startx = tocas[c1].x
+            predadores[predadores.length-1].starty = tocas[c1].y
          }
 
     }
@@ -290,32 +311,34 @@ function main(){ // funcao principal do jogo
     c.filter = "none";
     for(c1=0;c1 < predadores.length ;c1++){
         if(predadores[c1].vx > 0){
-            if(predadores[c1].tic == 0){
+            if(predadores[c1].tic >= 0 && predadores[c1].tic < 5){
                 c.drawImage(predador1,predadores[c1].x*zoom,predadores[c1].y*zoom,64,64)
             }
-            if(predadores[c1].tic == 1){
+            if(predadores[c1].tic >= 5 && predadores[c1].tic <= 10){
                 c.drawImage(predador2,predadores[c1].x*zoom,predadores[c1].y*zoom,64,64)
             }
         }
         if(predadores[c1].vx < 0){
-            if(predadores[c1].tic == 0){
+            if(predadores[c1].tic >= 0 && predadores[c1].tic < 5){
                 c.drawImage(predador3,predadores[c1].x*zoom,predadores[c1].y*zoom,64,64)
             }
-            if(predadores[c1].tic == 1){
+            if(predadores[c1].tic >= 5 && predadores[c1].tic <= 10){
                 c.drawImage(predador4,predadores[c1].x*zoom,predadores[c1].y*zoom,64,64)
             }
             
         }
         if(pausa == false){
             predadores[c1].tic+=1
-            if(predadores[c1].tic > 1){
+            if(predadores[c1].tic > 10){
                 predadores[c1].tic = 0
             }
             predadores[c1].maximodetempo-=1
             if(predadores[c1].maximodetempo <= 0){
-                predadores.splice(c1,1)
-            }
-            if(predadores.length > 0){predadorwander(c1)}
+                predadorback(c1)
+            }else{
+                predadorhunt(c1)
+             }
+            
         }
     }
      for(c1=0;c1 < fabricas.length ;c1++){
@@ -341,19 +364,26 @@ function main(){ // funcao principal do jogo
             for(c2=0;c2 < arv.length ;c2++){
          
                 if(pontoColidecomCirculo(arv[c2].x,arv[c2].y,fabricas[c1].x,fabricas[c1].y,500)){
-                   if(pausa == false){ arv[c2].comida -= 0.25 }
+                   if(pausa == false){ arv[c2].comida -= 0.25
+                    c.drawImage(venenoimg,arv[c2].x+10,arv[c2].y-30,32,32)
+                    }
                  
             }
         }
             for(c2=0;c2 < grupo.length ;c2++){
                 if(pontoColidecomCirculo(grupo[c2].x,grupo[c2].y,fabricas[c1].x,fabricas[c1].y,400)){
                    if(pausa == false){ grupo[c2].energia -= 10}
+                   c.drawImage(venenoimg,grupo[c2].x+10,grupo[c2].y-30,32,32)
+                   grupo[c2].envenado = true
             }
+            else{
+                grupo[c2].envenado = false
         }
                 
 
     
     }
+}
 
     for(c1=0;c1 < arv.length ;c1++){
 
@@ -735,6 +765,7 @@ canvas.addEventListener("click",function(){
         if(remov == true){
             let mx = event.offsetX
             let my = event.offsetY
+            
 
             for(c40 = 0;c40<arv.length;c40++){
                 if(mx > arv[c40].x && mx < arv[c40].x+64 && my > arv[c40].y && my < arv[c40].y+64){
@@ -751,7 +782,25 @@ canvas.addEventListener("click",function(){
                     grupo.splice(c40,1)
 
                 }
+
               }
+              for(c40 = 0;c40<fabricas.length;c40++){
+                if(mx > fabricas[c40].x && mx < fabricas[c40].x+128 && my > fabricas[c40].y && my < fabricas[c40].y+128){
+                    fabricas.splice(c40,1)
+
+                }
+                
+              }
+              for(c40 = 0;c40<tocas.length;c40++){
+                if(mx > tocas[c40].x && mx < tocas[c40].x+64 && my > tocas[c40].y && my < tocas[c40].y+64){
+                    tocas.splice(c40,1)
+                    if((predadores[c40] == null || predadores[c40] == undefined) == false){
+                    predadores.splice(c40,1)
+                    }
+                    
+                }
+                }
+            
         
 
 
@@ -784,6 +833,8 @@ canvas.addEventListener("click",function(){
              drawarvore = !drawarvore
              remov = false 
                 drawfabrica = false
+                drawtoca = false
+
              }
             
                     if( !(event.offsetX > 930 && event.offsetX < 930+352 && event.offsetY > 50 && event.offsetY < 50+688) && tela == 2 && drawarvore == true){

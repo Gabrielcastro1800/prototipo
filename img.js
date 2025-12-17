@@ -78,3 +78,6 @@ let predadorimg3 = new Image();
 predadorimg3.src = "sprites/predador/3.png"
 let predadorimg4 = new Image();
 predadorimg4.src = "sprites/predador/4.png"
+
+let venenoimg = new Image();
+venenoimg.src = "sprites/natural/poison.png"
