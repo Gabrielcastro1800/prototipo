@@ -104,7 +104,7 @@ let water = [400,300,50,50] // temporario relacionado a localização da comida 
 
 let arv = []
 
-// Histórico de médias para gráfico
+
 let historicoVelocidade = []
 let historicoTamanho = []
 let historicoEnergia = []
@@ -115,8 +115,8 @@ let historicoReproducoolmax = []
 let historicoIdademax = []
 let historicoFalante = []
 let ultimoDiaGrafico = 0
-let graficoAtual = 0  // 0-8 para cada variável
-let graficoOffset = 0 // índice inicial para rolagem do gráfico (janela de 7 ciclos)
+let graficoAtual = 0  
+let graficoOffset = 0 
 
 
 
@@ -376,7 +376,8 @@ function main(){ // funcao principal do jogo
     
     c.filter = "none";
     for(c1=0;c1 < predadores.length ;c1++){
-        // Sempre desenhar o predador (sem piscar) - tic controla apenas animação
+       
+
         if(predadores[c1].vx > 0){
             if(predadores[c1].tic < 5){
                 c.drawImage(predador1,predadores[c1].x*zoom,predadores[c1].y*zoom,64,64)
@@ -623,12 +624,12 @@ c.fillRect(10,100,100,30)
             c.fillText("Clique para alternar variáveis (" + (graficoAtual + 1) + "/9)", 350, 125)
             c.fillText("Use ← → para rolar ciclos", 600, 125)
 
-            // Desenhar setas de rolagem
+       
             let arrowSize = 28
             let arrowY = 120
             let leftX = 80
             let rightX = 80 + 1050 - arrowSize
-            // estilo das setas (desabilitado se não houver mais para rolar)
+          
             c.fillStyle = (graficoOffset > 0) ? "rgba(220,220,220,1)" : "rgba(120,120,120,0.5)"
             c.fillRect(leftX, arrowY, arrowSize, arrowSize)
             c.fillStyle = "black"
@@ -641,8 +642,8 @@ c.fillRect(10,100,100,30)
             c.fillText(">", rightX + 6, arrowY + 20)
 
             c.fillStyle = "rgba(252, 252, 252, 1)"
-            c.fillRect(80, 150, 1050, 2)  // eixo X
-            c.fillRect(80, 150, 2, 520)   // eixo Y
+            c.fillRect(80, 150, 1050, 2)  
+            c.fillRect(80, 150, 2, 520)   
 
             c.font = "14px serif"
 
@@ -653,7 +654,7 @@ c.fillRect(10,100,100,30)
             c.fillText("Ciclos:", 20, 720)
 
             if(historicoAtual.length > 0){
-                // ajustar graficoOffset caso dados tenham diminuído
+              
                 if(graficoOffset < 0) graficoOffset = 0
                 if(graficoOffset > Math.max(0, historicoAtual.length - 7)) graficoOffset = Math.max(0, historicoAtual.length - 7)
 
@@ -687,7 +688,7 @@ c.fillRect(10,100,100,30)
 
                     c.fillStyle = "rgba(252, 252, 252, 1)"
                     c.font = "12px serif"
-                    c.fillText((i+1), x + 35, 720) // número do ciclo
+                    c.fillText((i+1), x + 35, 720) 
 
                     c.font = "11px serif"
                     c.fillText(value.toFixed(1), x + 20, y - 5)
@@ -764,7 +765,7 @@ canvas.addEventListener("click",function(){
             return
         }
 
-        // Mapeamento do historico atual (mesma lógica que no render)
+      
         let historicoAtual = graficoAtual === 0 ? historicoVelocidade : 
                               graficoAtual === 1 ? historicoTamanho : 
                               graficoAtual === 2 ? historicoEnergia :
@@ -774,26 +775,26 @@ canvas.addEventListener("click",function(){
                               graficoAtual === 6 ? historicoReproducoolmax :
                               graficoAtual === 7 ? historicoIdademax : historicoFalante
 
-        // coordenadas das setas (deve coincidir com a renderização)
+       
         let arrowSize = 28
         let arrowY = 120
         let leftX = 80
         let rightX = 80 + 1050 - arrowSize
 
-        // clique na seta esquerda -> rolar para trás
+    
         if(event.offsetX >= leftX && event.offsetX <= leftX + arrowSize && event.offsetY >= arrowY && event.offsetY <= arrowY + arrowSize){
             graficoOffset = Math.max(0, graficoOffset - 1)
             return
         }
 
-        // clique na seta direita -> rolar para frente
+      
         if(event.offsetX >= rightX && event.offsetX <= rightX + arrowSize && event.offsetY >= arrowY && event.offsetY <= arrowY + arrowSize){
             let maxOffset = Math.max(0, historicoAtual.length - 7)
             graficoOffset = Math.min(maxOffset, graficoOffset + 1)
             return
         }
 
-        // clique padrão alterna a variável do gráfico
+      
         graficoAtual = (graficoAtual + 1) % 9
     }
 
@@ -876,13 +877,13 @@ canvas.addEventListener("click",function(){
     grupo[c2].cor = Math.floor(Math.random() * 255);
     grupo[c2].falante = Math.floor(Math.random() * 4000);
     grupo[c2].velocidade = (Math.random() * 5)
-    grupo[c2].maxenergiaenergia = Math.floor(Math.random() * 12000);
+    grupo[c2].maxenergiaenergia = Math.floor(Math.random() * 12000)+1000;
     grupo[c2].energia = grupo[c2].maxenergiaenergia;
     grupo[c2].nome = nomes[ Math.floor(Math.random() * nomes.length)]
     grupo[c2].bonito = Math.floor(Math.random() * 1000)
 
 
-     grupo[c2].idademax =  Math.floor(Math.random() * 100000)+1000
+     grupo[c2].idademax =  Math.floor(Math.random() * 100000)+2000
      grupo[c2].reproducoolmax =  Math.floor(Math.random() * 10000)+2500
 
 
@@ -970,7 +971,8 @@ canvas.addEventListener("click",function(){
             grupo[grupo.length-1].nome = nomes[ Math.floor(Math.random() * nomes.length)]
             grupo[grupo.length-1].bonito = Math.floor(Math.random() * 1000)
             grupo[grupo.length-1].reproducoolmax =  Math.floor(Math.random() * 10000)+2500
-            grupo[grupo.length-1].idademax =  Math.floor(Math.random() * 100000)+1000
+            grupo[grupo.length-1].idademax =  Math.floor(Math.random() * 100000)+2000
+
         }
         if( event.offsetX > 950 && event.offsetX < event.offsetX+130 && event.offsetY > 150 && event.offsetY < 150+40 && menu == 1){
             remov = !remov
@@ -1101,13 +1103,13 @@ document.addEventListener("keyup", function(){
     grupo[c2].cor = Math.floor(Math.random() * 255);
     grupo[c2].falante = Math.floor(Math.random() * 10000);
     grupo[c2].velocidade = (Math.random() * 5)
-    grupo[c2].maxenergiaenergia = Math.floor(Math.random() * 12000);
+    grupo[c2].maxenergiaenergia = Math.floor(Math.random() * 12000)+1000;
     grupo[c2].energia = grupo[c2].maxenergiaenergia;
     grupo[c2].nome = nomes[ Math.floor(Math.random() * nomes.length)]
     grupo[c2].bonito = Math.floor(Math.random() * 1000)
 
 
-     grupo[c2].idademax =  Math.floor(Math.random() * 100000)+1000
+     grupo[c2].idademax =  Math.floor(Math.random() * 100000)+2000
      grupo[c2].reproducoolmax =  Math.floor(Math.random() * 10000)+2500
 
      
